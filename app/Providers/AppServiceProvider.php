@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace tecai\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

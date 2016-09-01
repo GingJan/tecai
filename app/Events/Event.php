@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace tecai\Events;
 
 abstract class Event
 {

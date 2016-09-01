@@ -1,5 +1,5 @@
 suites:
     main:
-        namespace: App
-        psr4_prefix: App
+        namespace: tecai
+        psr4_prefix: tecai
         src_path: app
