@@ -11,6 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+DingoRoute::group(['namespace' => 'System'], function($dgRoute) {
+
+    $dgRoute->group(['prefix' => 'roles'], function () use ($dgRoute) {
+        $dgRoute->get('/', 'RoleController@index');
+        $dgRoute->post('/', 'RoleController@store');
+        $dgRoute->get('/{id}', 'RoleController@show');
+    });
 });
