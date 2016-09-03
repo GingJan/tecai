@@ -148,7 +148,9 @@ return [
         /**
          * third part Service Provider
          */
-        Zizaco\Entrust\EntrustServiceProvider::class,
+        Zizaco\Entrust\EntrustServiceProvider::class,//RBAC权限系统库
+        Prettus\Repository\Providers\RepositoryServiceProvider::class,//repository库
+        Dingo\Api\Provider\LaravelServiceProvider::class
 
     ],
 
@@ -198,6 +200,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
+        'DingoApi'     => Dingo\Api\Facade\API::class,
+        'DingoRoute'     => Dingo\Api\Facade\Route::class,
+
     ],
 
 ];

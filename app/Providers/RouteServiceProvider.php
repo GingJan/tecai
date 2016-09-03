@@ -37,7 +37,21 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map(Router $router)
     {
-        $router->group(['namespace' => $this->namespace], function ($router) {
+        $this->requireDingoRoute();
+        //'namespace'=>默认命名空间
+//        $router->group(['namespace' => $this->namespace], function ($router) {
+//            require app_path('Http/routes.php');//引入路由文件
+//        });
+    }
+
+    public function requireDingoRoute() {
+        $dingo_route = app('Dingo\Api\Routing\Router');
+
+        $dingo_route->group([
+            'version' => env('API_VERSION', 'v1'),
+            'namespace' => $this->namespace,
+//            'namespace' => $this->api_namespace,
+        ], function($dingo_route) {
             require app_path('Http/routes.php');
         });
     }

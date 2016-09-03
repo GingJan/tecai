@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'model' => tecai\User::class,
+    'model' => tecai\Models\System\User::class,
 
     /*
     |--------------------------------------------------------------------------
