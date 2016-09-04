@@ -150,7 +150,8 @@ return [
          */
         Zizaco\Entrust\EntrustServiceProvider::class,//RBAC权限系统库
         Prettus\Repository\Providers\RepositoryServiceProvider::class,//repository库
-        Dingo\Api\Provider\LaravelServiceProvider::class
+        Dingo\Api\Provider\LaravelServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
 
     ],
 
