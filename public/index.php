@@ -6,15 +6,6 @@
  * @package  Laravel
  * @author   Taylor Otwell <taylorotwell@gmail.com>
  */
-if($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-    header('Access-Control-Allow-Headers: X-Requested-With, Content-Type, Accept');
-    header('Access-Control-Max-Age: 172800');
-    header("Content-Length: 0");
-    header("Content-Type: text/plain");
-    exit(0);
-}
 
 /*
 |--------------------------------------------------------------------------
