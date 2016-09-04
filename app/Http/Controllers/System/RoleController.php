@@ -24,7 +24,6 @@ class RoleController extends Controller
     {
         //根据id查询，角色名查询，描述查询
         return $this->repository->all();
-        //
     }
 
     /**
