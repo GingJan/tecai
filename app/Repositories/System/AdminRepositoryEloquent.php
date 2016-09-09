@@ -5,15 +5,14 @@ namespace tecai\Repositories\System;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Validator\Contracts\ValidatorInterface;
-use tecai\Repositories\Interfaces\System\RoleRepository;
-use tecai\Models\System\Role;
-use tecai\Validators\RoleValidator;
+use tecai\Model\System\Admin;
+use tecai\Repositories\Interfaces\System\AdminRepository;
 
 /**
- * Class RoleRepositoryEloquent
+ * Class AdminRepositoryEloquent
  * @package namespace tecai\Repositories\System;
  */
-class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
+class AdminRepositoryEloquent extends BaseRepository implements AdminRepository
 {
     /**
      * Specify Model class name
@@ -22,32 +21,28 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
      */
     public function model()
     {
-        return Role::class;
+        return Admin::class;
     }
 
-    //使用外部自定义的Validator 类
-//    public function validator() {
-//        return RoleValidator::class;
-//    }
+
 
     protected $rules = [
         ValidatorInterface::RULE_CREATE => [
-//            'name' => 'sometimes|unique:roles,name',//somtimes和required一起使用？
-            'name' => ['required', 'unique:roles','max:255'],
-            'display_name' => ['sometimes','required','max:255'],
-            'description' => ['sometimes','max:255'],
+            'username' => ['required', 'unique:admins','max:15'],
+            'password' => ['required'],
+            'email' => ['required','max:31'],
             'created_at' => ['required'],
             'updated_at' => ['required'],
         ],
         ValidatorInterface::RULE_UPDATE => [
-            'name' => 'sometimes|unique:roles,name',//somtimes和required一起使用？
-//            'name' => ['sometimes','required','unique:roles,name']//somtimes和required一起使用？
-            'display_name' => ['sometimes','required','max:255'],
-            'description' => ['sometimes','max:255'],
+            'password' => ['sometimes'],
+            'email' => ['sometimes','max:31'],
+            'created_at' => ['required'],
             'updated_at' => ['required'],
         ],
     ];
-    
+
+
 
     /**
      * Boot up the repository, pushing criteria
@@ -60,7 +55,9 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
     public function create(array $attributes) {
         //验证可以在这里进行
         $formatTime = date("Y-m-d H:i:s", $_SERVER['REQUEST_TIME']);
-        $attributes['updated_at'] = $attributes['created_at'] = $formatTime;
+        $attributes['last_login_at'] = $attributes['updated_at'] = $attributes['created_at'] = $formatTime;
+        $attributes['last_login_ip'] = $_SERVER['REMOTE_ADDR'];
+        $attributes['password'] = bcrypt($attributes['password']);
         $r = parent::create($attributes);
         return $r;
     }
@@ -70,6 +67,4 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
         $attributes['updated_at'] = $formatTime;
         return parent::update($attributes, $id);
     }
-
-//    public function
 }

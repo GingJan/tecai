@@ -10,7 +10,7 @@ class RoleValidator extends LaravelValidator
 
     protected $rules = [
         ValidatorInterface::RULE_CREATE => [
-            'name' => ['required', 'unique','max:255'],
+            'name' => ['required', 'unique:roles','max:255'],
             'display_name' => ['sometimes','required','max:255'],
             'description' => ['sometimes','max:255'],
             'created_at' => ['required'],

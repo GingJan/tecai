@@ -24,8 +24,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
-        //
-
         parent::boot($router);
     }
 
@@ -45,13 +43,12 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     public function requireDingoRoute() {
-        $dingo_route = app('Dingo\Api\Routing\Router');
+        $dgRoute = app('Dingo\Api\Routing\Router');//或者使用依赖注入
 
-        $dingo_route->group([
+        $dgRoute->group([
             'version' => env('API_VERSION', 'v1'),
             'namespace' => $this->namespace,
-//            'namespace' => $this->api_namespace,
-        ], function($dingo_route) {
+        ], function($dgRoute) {
             require app_path('Http/routes.php');
         });
     }

@@ -5,10 +5,10 @@ namespace tecai\Repositories\Interfaces\System;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
- * Interface RoleRepository
+ * Interface AdminRepository
  * @package namespace tecai\Repositories\Interfaces\System;
  */
-interface RoleRepository extends RepositoryInterface
+interface AdminRepository extends RepositoryInterface
 {
     //
 }

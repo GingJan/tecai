@@ -9,15 +9,20 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use tecai\Http\Requests;
 use tecai\Http\Controllers\Controller;
-use tecai\Models\System\Role;
-use tecai\Repositories\Interfaces\System\RoleRepository;
+use tecai\Model\System\Admin;
+use tecai\Repositories\Interfaces\System\AdminRepository;
+use tecai\Repositories\Interfaces\System\PermissionRepository;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
-class RoleController extends Controller
+class AdminController extends Controller
 {
     protected $repository;
-    public function __construct(RoleRepository $roleRepository) {
-        $this->repository = $roleRepository;
+
+    public function __construct(AdminRepository $adminRepository) {//注入仓库接口
+        $this->repository = $adminRepository;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,11 +30,24 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //根据id查询，角色名查询，描述查询
         try {
             return $this->repository->all();
         } catch(\Exception $e) {
-            throw new NotFoundHttpException($e->getMessage());
+            $this->response->errorNotFound($e->getMessage());
+        }
+    }
+
+    public function login(Request $request) {
+        $credentials = $request->only('username', 'password');
+        try {
+            $model = Admin::where('username','=',$this->request->input('username'))->first();
+            if(password_verify($credentials['password'], $model->password)) {
+                $model->token = JWTAuth::fromUser($model, $model->toArray());//该token中包含了staff的一些信息
+                return $model;
+            }
+            $this->response->errorUnauthorized('invalid_credentials');
+        } catch (JWTException $e) {
+            $this->response->errorInternal($e->getMessage());
         }
     }
 
@@ -54,9 +72,8 @@ class RoleController extends Controller
         try {
             return $this->repository->create($request->all());
         } catch (ValidatorException $e) {
-//            dd($e->getTraceAsString());
-//            dd($e->getMessage());
-            throw new BadRequestHttpException($e->getMessageBag());
+            $this->response->errorBadRequest($e->getMessageBag());
+//            throw new BadRequestHttpException($e->getMessageBag());
         }
     }
 
@@ -71,7 +88,8 @@ class RoleController extends Controller
         try {
             return $this->repository->find($id);
         } catch (\Exception $e) {
-            throw new NotFoundHttpException($e->getMessage());
+            $this->response->errorNotFound($e->getMessage());
+//            throw new NotFoundHttpException($e->getMessage());
         }
     }
 
@@ -98,9 +116,11 @@ class RoleController extends Controller
         try {
             return $this->repository->update($request->all(), $id);
         } catch (ValidatorException $e) {
-            throw new BadRequestHttpException($e->getMessageBag());
+            $this->response->errorBadRequest($e->getMessageBag());
+//            throw new BadRequestHttpException($e->getMessageBag());
         } catch (\Exception $e) {
-            throw new NotFoundHttpException($e->getMessage());
+            $this->response->errorNotFound($e->getMessage());
+//            throw new NotFoundHttpException($e->getMessage());
         }
     }
 
@@ -115,7 +135,8 @@ class RoleController extends Controller
         try {
             $this->repository->delete($id);
         } catch (\Exception $e) {
-            throw new NotFoundHttpException($e->getMessage());
+            $this->response->errorNotFound($e->getMessage());
+//            throw new NotFoundHttpException($e->getMessage());
         }
     }
 }

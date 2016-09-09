@@ -25,5 +25,6 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         $this->app->singleton('tecai\Repositories\Interfaces\System\PermissionRepository', 'tecai\Repositories\System\PermissionRepositoryEloquent');
         $this->app->singleton('tecai\Repositories\Interfaces\System\RoleRepository', 'tecai\Repositories\System\RoleRepositoryEloquent');
+        $this->app->singleton('tecai\Repositories\Interfaces\System\AdminRepository', 'tecai\Repositories\System\AdminRepositoryEloquent');
     }
 }

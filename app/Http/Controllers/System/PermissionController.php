@@ -4,6 +4,9 @@ namespace tecai\Http\Controllers\System;
 
 use Illuminate\Http\Request;
 
+use Prettus\Validator\Exceptions\ValidatorException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use tecai\Http\Requests;
 use tecai\Http\Controllers\Controller;
 use tecai\Repositories\Interfaces\System\PermissionRepository;
@@ -23,8 +26,12 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        $this->repository->getFieldsSearchable();
-        //
+        try {
+            return $this->repository->all();
+        } catch(\Exception $e) {
+            $this->response->errorNotFound($e->getMessage());
+            throw new NotFoundHttpException($e->getMessage());
+        }
     }
 
     /**
@@ -45,7 +52,11 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            return $this->repository->create($request->all());
+        } catch (ValidatorException $e) {
+            throw new BadRequestHttpException($e->getMessageBag());
+        }
     }
 
     /**
@@ -56,7 +67,11 @@ class PermissionController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            return $this->repository->find($id);
+        } catch (\Exception $e) {
+            throw new NotFoundHttpException($e->getMessage());
+        }
     }
 
     /**
@@ -65,9 +80,9 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request,$id)
     {
-        //
+
     }
 
     /**
@@ -79,7 +94,13 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            return $this->repository->update($request->all(), $id);
+        } catch (ValidatorException $e) {
+            throw new BadRequestHttpException($e->getMessageBag());
+        } catch (\Exception $e) {
+            throw new NotFoundHttpException($e->getMessage());
+        }
     }
 
     /**
@@ -90,6 +111,10 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $this->repository->delete($id);
+        } catch (\Exception $e) {
+            throw new NotFoundHttpException($e->getMessage());
+        }
     }
 }
