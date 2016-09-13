@@ -4,12 +4,14 @@ namespace tecai\Http\Controllers\System;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use tecai\Http\Requests;
 use tecai\Http\Controllers\Controller;
-use tecai\Model\System\Admin;
+use tecai\Models\System\Admin;
+use tecai\Repositories\Interfaces\System\AccountRepository;
 use tecai\Repositories\Interfaces\System\AdminRepository;
 use tecai\Repositories\Interfaces\System\PermissionRepository;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -28,10 +30,18 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            return $this->repository->all();
+            $res = $this->repository->listByLimit($input = $request->getQuery());
+
+            return $res;
+//            return $this->response()->collection($res, new StaffTransformer());
+//            } catch(QueryException $e) {
+                //可以加个log日志记录
+//                $this->response()->errorNotFound();
+//            }
+//            return $this->repository->all();
         } catch(\Exception $e) {
             $this->response->errorNotFound($e->getMessage());
         }
@@ -39,8 +49,9 @@ class AdminController extends Controller
 
     public function login(Request $request) {
         $credentials = $request->only('username', 'password');
+
         try {
-            $model = Admin::where('username','=',$this->request->input('username'))->first();
+            $model = $this->repository->findOne('username', $request->input('username'));
             if(password_verify($credentials['password'], $model->password)) {
                 $model->token = JWTAuth::fromUser($model, $model->toArray());//该token中包含了staff的一些信息
                 return $model;
@@ -62,18 +73,23 @@ class AdminController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param AccountRepository $accountRepository
+     * @return mixed
      */
-    public function store(Request $request)
+    public function store(Request $request, AccountRepository $accountRepository)
     {
         try {
-            return $this->repository->create($request->all());
+            DB::beginTransaction();
+            $accountRepository->create($request->only('account','password'));//创建账户
+            $model = $this->repository->create($request->all());
+            DB::commit();
+            return $model;
         } catch (ValidatorException $e) {
-            $this->response->errorBadRequest($e->getMessageBag());
-//            throw new BadRequestHttpException($e->getMessageBag());
+            DB::rollback();
+            //log,记录日志的方式是通过事件来实现
+//            $this->response->errorBadRequest($e->getMessageBag());
+            throw new BadRequestHttpException($e->getMessageBag());
         }
     }
 
