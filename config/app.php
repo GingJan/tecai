@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Shanghai',
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'en',//可以改成中文zh
 
     /*
     |--------------------------------------------------------------------------
@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'en',//备用语言，如果在本地语言中找不到，那么会自动使用备用语言的内容
 
     /*
     |--------------------------------------------------------------------------
@@ -152,6 +152,8 @@ return [
         Prettus\Repository\Providers\RepositoryServiceProvider::class,//repository库
         Dingo\Api\Provider\LaravelServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
+        Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,//phpstorm 的 laravel 辅助工具
 
     ],
 
@@ -201,8 +203,10 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
-        'DingoApi'     => Dingo\Api\Facade\API::class,
-        'DingoRoute'     => Dingo\Api\Facade\Route::class,
+        'DingoApi'  => Dingo\Api\Facade\API::class,
+        'DingoRoute'=> Dingo\Api\Facade\Route::class,
+        'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
 
     ],
 

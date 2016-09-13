@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'model' => tecai\Models\System\User::class,
+    'model' => tecai\Models\System\Account::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -41,7 +41,7 @@ return [
     |
     */
 
-    'table' => 'users',
+    'table' => 'accounts',
 
     /*
     |--------------------------------------------------------------------------
