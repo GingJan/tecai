@@ -17,7 +17,7 @@ class Kernel extends HttpKernel
         \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-//        \tecai\Http\Middleware\VerifyCsrfToken::class,
+//        \tecai\Http\Middleware\VerifyCsrfToken::class,//api模式下不需要csrf
         \Barryvdh\Cors\HandleCors::class,
     ];
 
@@ -34,6 +34,7 @@ class Kernel extends HttpKernel
         'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
         'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
         'jwt.auth'  =>  \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
-        'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class
+        'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
+        'jwt_check' => \tecai\Http\Middleware\JWTCheck::class,//注册自定义的中间件
     ];
 }
