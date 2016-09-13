@@ -15,7 +15,7 @@ use tecai\Repositories\Interfaces\System\AccountRepository;
 use tecai\Repositories\Interfaces\User\UserRepository;
 
 
-class UsersController extends Controller
+class UserController extends Controller
 {
 
     /**
@@ -23,10 +23,6 @@ class UsersController extends Controller
      */
     protected $repository;
 
-    /**
-     * @var UserValidator
-     */
-    protected $validator;
 
     public function __construct(UserRepository $repository)
     {
@@ -35,23 +31,17 @@ class UsersController extends Controller
 
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return mixed
      */
-    public function index()
+    public function index(Request $request)
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $users = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $users,
-            ]);
+        try {
+            $res = $this->repository->listByLimit($request->getQueryString());
+            return $res;
+        } catch(\Exception $e) {
+            $this->response->errorNotFound($e->getMessage());
         }
-
-        return view('users.index', compact('users'));
     }
 
     /**
@@ -77,16 +67,13 @@ class UsersController extends Controller
 
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param $account
+     * @return mixed
      */
-    public function show($id)
+    public function show($account)
     {
         try {
-            return $this->repository->find($id);
+            return $this->repository->findOneByField('account',$account);
         } catch (NotFoundHttpException $e) {
 //            $this->response->errorNotFound($e->getMessage());
             throw $e;
@@ -120,10 +107,11 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            return $this->repository->update($request->all(), $id);
+            $model = $this->repository->findOneByField('account',$id);
+            return $this->repository->update($request->all(), $model->id);
         } catch (ValidatorException $e) {
-            $this->response->errorBadRequest($e->getMessageBag());
-//            throw new BadRequestHttpException($e->getMessageBag());
+            throw new BadRequestHttpException($e->getMessageBag());
+//            $this->response->errorBadRequest($e->getMessageBag());
         } catch (NotFoundHttpException $e) {
             throw $e;
 //            $this->response->errorNotFound($e->getMessage());
@@ -138,9 +126,13 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($account)
     {
-        $deleted = $this->repository->delete($id);
-
+        try {
+            $this->repository->deleteByField('account', $account);
+            return $this->response()->noContent();
+        } catch (NotFoundHttpException $e) {
+            return $this->response()->noContent();
+        }
     }
 }

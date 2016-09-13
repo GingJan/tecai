@@ -2,7 +2,6 @@
 
 namespace tecai\Repositories\User;
 
-use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use tecai\Repositories\Interfaces\User\UserRepository;
@@ -36,7 +35,7 @@ class UserRepositoryEloquent extends CommonRepositoryEloquent implements UserRep
             'last_login_ip' => ['sometimes','ip']
         ],
         ValidatorInterface::RULE_UPDATE => [
-            'username' => ['required', 'unique:users', 'max:31'],
+            'username' => ['required', 'max:31', 'unique:users'],
             'email' => ['sometimes', 'email', 'max:31', 'unique:users'],
             'phone' => ['sometimes', 'regex:/^1[3|5|8]{1}[0-9]{1}[0-9]{8}$/', 'max:11', 'unique:users'],
             'age' => ['sometimes', 'numeric', 'min:0'],
@@ -52,6 +51,21 @@ class UserRepositoryEloquent extends CommonRepositoryEloquent implements UserRep
             'last_login_at' => ['sometimes','date_format:Y-m-d H:i:s'],
             'last_login_ip' => ['sometimes','ip']
         ],
+    ];
+
+    protected $fieldSearchable = [
+        'username',
+        'email',
+        'phone',
+        'age',
+        'sex',
+        'school_level',
+        'school',
+        'college',
+        'province',
+        'city',
+        'wants_job_id',
+        'wants_job_name',
     ];
 
     /**
@@ -85,6 +99,9 @@ class UserRepositoryEloquent extends CommonRepositoryEloquent implements UserRep
 
     public function update(array $attributes, $id) {
         $formatTime = date("Y-m-d H:i:s", $_SERVER['REQUEST_TIME']);
+        $this->rules[ValidatorInterface::RULE_UPDATE]['username'][2] = 'unique:users,username,'.$id;//如果要account作为except的话,unique:users,username,$account,account
+        $this->rules[ValidatorInterface::RULE_UPDATE]['email'][3] = 'unique:users,email,'.$id;
+        $this->rules[ValidatorInterface::RULE_UPDATE]['phone'][3] = 'unique:users,phone,'.$id;
         $attributes['updated_at'] = $formatTime;
         return parent::update($attributes, $id);
     }
