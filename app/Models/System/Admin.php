@@ -2,19 +2,6 @@
 
 namespace tecai\Models\System;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Illuminate\Foundation\Auth\Access\Authorizable;
-use Prettus\Repository\Contracts\Transformable;
-use Prettus\Repository\Traits\TransformableTrait;
-use tecai\Models\System\Account;
-use tecai\Models\System\User;
-use Zizaco\Entrust\Traits\EntrustUserTrait;
-
 class Admin extends Account
 {
     //如果不填该项，则数据表默认是模型名字的复数staffs
