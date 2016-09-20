@@ -49,8 +49,9 @@ class AccountController extends Controller
     public function login(Request $request) {
         $credentials = $request->only('account', 'password');
         try {
-            $model = $this->repository->findOneByFiled('account', $request->input('account'));
+            $model = $this->repository->findOneByField('account', $credentials['account']);
             if(password_verify($credentials['password'], $model->password)) {
+                //取出数据，存入redis/memcached
                 $model->token = JWTAuth::fromUser($model, $model->toArray());//该token中包含了staff的一些信息
                 return $model;
             }
@@ -74,17 +75,6 @@ class AccountController extends Controller
             $this->response->errorNotFound($e->getMessage());
 //            throw new NotFoundHttpException($e->getMessage());
         }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Request $request,$id)
-    {
-
     }
 
     /**

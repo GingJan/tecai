@@ -15,7 +15,7 @@ DingoRoute::group(['namespace' => 'System'], function($dgRoute) {
     $dgRoute->post('/admins', 'AdminController@store');
     $dgRoute->post('/login', 'AccountController@login');
 
-    $dgRoute->group(['middleware' => 'jwt_check'], function () use ($dgRoute) {
+//    $dgRoute->group(['middleware' => 'jwt_check'], function () use ($dgRoute) {
         $dgRoute->group(['prefix' => 'roles'], function () use ($dgRoute) {
             $dgRoute->get('/', 'RoleController@index');
             $dgRoute->get('/{id}', 'RoleController@show');
@@ -32,7 +32,7 @@ DingoRoute::group(['namespace' => 'System'], function($dgRoute) {
 //        $dgRoute->put('/{id}', 'AdminController@update');
 //        $dgRoute->patch('/{id}', 'AdminController@update');
         });
-    });
+//    });
 });
 
 DingoRoute::group(['namespace' => 'User'], function($dgRoute) {
@@ -46,4 +46,14 @@ DingoRoute::group(['namespace' => 'User'], function($dgRoute) {
             $dgRoute->delete('/{account}', 'UserController@destroy');
         });
     });
+
+    $dgRoute->group(['prefix' => 'jobs'], function () use ($dgRoute) {
+        $dgRoute->get('/', 'JobController@index');
+        $dgRoute->get('/{id}', 'JobController@show');
+        $dgRoute->post('/', 'JobController@store');
+        $dgRoute->match(['put', 'patch'], '/{id}', 'JobController@update');
+        $dgRoute->delete('/{id}', 'JobController@destroy');
+    });
+
+
 });

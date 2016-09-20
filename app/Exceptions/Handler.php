@@ -42,6 +42,8 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        dd('here is tecai\Exceptions\Handler');
+        //当不使用Dingo\Api\Provider\LaravelServiceProvider::class时，异常才会在这里被处理
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
         }

@@ -154,6 +154,7 @@ return [
         Barryvdh\Cors\ServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,//phpstorm 的 laravel 辅助工具
+        Barryvdh\Debugbar\ServiceProvider::class,//强大的调试工具，可用于查看ORM生成的SQL。当然，你亦可在AppServiceProvider下注册，但如果在这里里配置，那么无论什么环境下都会载入该SP，虽然APP_DEBUG=false可以保证不会在正式环境上执行，但是依然会影响Laravel的启动速度和时间，也浪费内存，因为毕竟该SP会载入
 
     ],
 
@@ -207,6 +208,7 @@ return [
         'DingoRoute'=> Dingo\Api\Facade\Route::class,
         'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
 
     ],
 

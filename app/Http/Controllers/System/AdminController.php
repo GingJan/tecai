@@ -2,6 +2,7 @@
 
 namespace tecai\Http\Controllers\System;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
@@ -33,7 +34,7 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         try {
-            $res = $this->repository->listByLimit($input = $request->getQuery());
+            $res = $this->repository->listByLimit($request->getQuery());
 
             return $res;
 //            return $this->response()->collection($res, new StaffTransformer());
@@ -101,12 +102,13 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        try {
+//        try {
             return $this->repository->find($id);
-        } catch (\Exception $e) {
-            $this->response->errorNotFound($e->getMessage());
+//        } catch (ModelNotFoundException $e) {
+//            throw
+//            $this->response->errorNotFound($e->getMessage());
 //            throw new NotFoundHttpException($e->getMessage());
-        }
+//        }
     }
 
     /**
@@ -150,9 +152,9 @@ class AdminController extends Controller
     {
         try {
             $this->repository->delete($id);
-        } catch (\Exception $e) {
-            $this->response->errorNotFound($e->getMessage());
-//            throw new NotFoundHttpException($e->getMessage());
+            return $this->response()->noContent();
+        } catch (NotFoundHttpException $e) {
+            return $this->response()->noContent();
         }
     }
 }
