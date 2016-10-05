@@ -6,11 +6,11 @@
 
 3.本文档约定：
 
-3.1：基础URI为：http://tacai.zjien.com
+3.1：基础URI为：http://tecai.zjien.com
 
-3.2：接口文档里的 `GET /users` 代表使用HTTP GET方法请求 `/users`。
+3.2：接口文档里的 `GET /users` 代表使用 HTTP `GET` 方法请求 `/users`。
 
-3.2：接口详细文档里的URI都是基于基础URI上的，如： `GET /users?page=2` 代表 `GET http://tacai.zjien.com/users?page=2`。
+3.2：接口详细文档里的URI都是基于基础URI上的，如： `GET /users?page=2` 代表 `GET http://tecai.zjien.com/users?page=2`。
 
 3.3：GET方法的所有请求字段都以查询字符串形式发送，也即都要写在URI上，以?开头，如： `GET /jobs?name=设计师&page=2`。
 
