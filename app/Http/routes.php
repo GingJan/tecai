@@ -16,6 +16,7 @@ DingoRoute::group(['namespace' => 'System'], function($dgRoute) {
     $dgRoute->post('/login', 'AccountController@login');
 
 //    $dgRoute->group(['middleware' => 'jwt_check'], function () use ($dgRoute) {
+//    $dgRoute->group(['middleware' => 'api.auth'], function () use ($dgRoute) {
         $dgRoute->group(['prefix' => 'roles'], function () use ($dgRoute) {
             $dgRoute->get('/', 'RoleController@index');
             $dgRoute->get('/{id}', 'RoleController@show');
@@ -29,8 +30,6 @@ DingoRoute::group(['namespace' => 'System'], function($dgRoute) {
             $dgRoute->get('/{id}', 'AdminController@show');
             $dgRoute->match(['put', 'patch'], '/{id}', 'AdminController@update');
             $dgRoute->delete('/{id}', 'AdminController@destroy');
-//        $dgRoute->put('/{id}', 'AdminController@update');
-//        $dgRoute->patch('/{id}', 'AdminController@update');
         });
 //    });
 });
