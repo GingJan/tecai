@@ -1,9 +1,12 @@
 <?php
 namespace tecai\Http\Controllers\User;
 
+use Illuminate\Pagination\Paginator;
 use tecai\Http\Controllers\Controller;
-use tecai\Http\Requests\Request;
+use Illuminate\Http\Request;
+use tecai\Models\User\Job;
 use tecai\Repositories\Interfaces\User\JobRepository;
+use tecai\Transformers\JobTransformer;
 
 /**
  * Class JobController
@@ -25,10 +28,26 @@ class JobController extends Controller {
 
     /**
      * @param Request $request
+     * @return \Dingo\Api\Http\Response
+     * TODO HATEOAS
+     */
+    public function index(Request $request) {
+        //添加meta元数据的是laravel的paginate
+        return $this->response()->paginator($this->repository->paginate(), new JobTransformer());
+    }
+
+
+    public function show($id) {
+        return $this->response()->item($this->repository->find($id), new JobTransformer());
+    }
+
+    /**
+     * @param Request $request
      */
     public function store(Request $request)
     {
-        $this->repository->create($request->all());
+        $model = $this->repository->create($request->all());
+        return $this->created($model->id);
     }
 
     /**
@@ -36,6 +55,34 @@ class JobController extends Controller {
      */
     public function update(Request $request, $id)
     {
-        return $this->repository->update($request->all(), $id);
+        $this->repository->update($request->all(), $id);
+        return $this->response()->noContent();
     }
+
+    /**
+     * @param int $id 岗位编号
+     * @return \Dingo\Api\Http\Response
+     */
+    public function destroy($id) {
+        $this->repository->delete($id);
+        return $this->response()->noContent();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -13,6 +13,7 @@ job_seq | 岗位编号 | N | string | 如：57e93fcb82243
 comapny_id | 该岗位所属公司的id | N | int | 
 comapny_name | 该岗位所属公司的名字 | N | string | 
 type | 招聘类型 | N | int | 实习：10；校招：20；社招：30
+salary | 薪水 | N | string | 如：5000
 work_city | 工作城市 | N | string | 如：广州 
 hr_id | 发布该岗位的 hr/员工 id | N | int |
 is_shown | 是否显示 | N | int | 显示：1，不显示：0
@@ -23,6 +24,7 @@ industry | 该岗位所属行业 | N | int | 行业id，可从行业列表中获
 page | 当前页码 | N | int | 默认1
 sorted_by | 根据哪个字段排序 | N | string | 如:sorted_by=created_at。默认根据created_at字段排序
 order_by | 顺序 | N | string | 升序：ASC；降序：DESC
+注意：不允许的字段会被忽略
 
 响应字段
 字段 | 含义 | 数据类型 | 备注

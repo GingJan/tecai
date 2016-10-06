@@ -5,8 +5,12 @@ use Illuminate\Http\Request;
 use Prettus\Repository\Contracts\CriteriaInterface;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
+/**
+ * Job查询条件类
+ * Class JobCriteria
+ * @package tecai\Criteria
+ */
 class JobCriteria implements CriteriaInterface {
-
     /**
      * @var Request $request
      */
@@ -17,11 +21,8 @@ class JobCriteria implements CriteriaInterface {
     }
 
     public function apply($model, RepositoryInterface $repository) {
-        $searchable = array_flip($repository->getFieldsSearchable());//name=xxx&salary=xxx&time=xxx
-        $query = $this->request->query();//name=xxx&salary=xxx&age=xxx
-        $valid = array_intersect_key($query, $searchable);//name=xxx&salary=xxx
+        $valid = array_allow($repository->getFieldsSearchable(), $this->request->query());
         $valid = array_map([$this, 'extractOperator'], $valid);
-
         foreach($valid as $field => $value) {
             $model = $model->where($field, $value['operator'], $value['value']);
 //            $where[] = [$field, $value['operator'], $value['value']];
