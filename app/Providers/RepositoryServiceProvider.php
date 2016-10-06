@@ -30,5 +30,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton('tecai\Repositories\Interfaces\System\AdminRepository', 'tecai\Repositories\System\AdminRepositoryEloquent');
         //User
         $this->app->singleton('tecai\Repositories\Interfaces\User\UserRepository', 'tecai\Repositories\User\UserRepositoryEloquent');
+        $this->app->singleton('tecai\Repositories\Interfaces\User\JobRepository', 'tecai\Repositories\User\JobRepositoryEloquent');
     }
 }
