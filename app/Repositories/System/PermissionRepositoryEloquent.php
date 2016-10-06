@@ -2,9 +2,9 @@
 
 namespace tecai\Repositories\System;
 
-use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Validator\Contracts\ValidatorInterface;
+use tecai\Repositories\CommonRepositoryEloquent;
 use tecai\Repositories\Interfaces\System\PermissionRepository;
 use tecai\Models\System\Permission;
 
@@ -12,7 +12,7 @@ use tecai\Models\System\Permission;
  * Class PermissionRepositoryEloquent
  * @package namespace tecai\Repositories\System;
  */
-class PermissionRepositoryEloquent extends BaseRepository implements PermissionRepository
+class PermissionRepositoryEloquent extends CommonRepositoryEloquent implements PermissionRepository
 {
 
     protected $fieldSearchable = ['name','description'];

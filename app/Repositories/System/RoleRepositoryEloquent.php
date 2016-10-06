@@ -2,9 +2,9 @@
 
 namespace tecai\Repositories\System;
 
-use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Validator\Contracts\ValidatorInterface;
+use tecai\Repositories\CommonRepositoryEloquent;
 use tecai\Repositories\Interfaces\System\RoleRepository;
 use tecai\Models\System\Role;
 use tecai\Validators\RoleValidator;
@@ -13,7 +13,7 @@ use tecai\Validators\RoleValidator;
  * Class RoleRepositoryEloquent
  * @package namespace tecai\Repositories\System;
  */
-class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
+class RoleRepositoryEloquent extends CommonRepositoryEloquent implements RoleRepository
 {
     /**
      * Specify Model class name

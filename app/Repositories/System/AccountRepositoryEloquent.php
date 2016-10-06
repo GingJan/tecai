@@ -49,6 +49,7 @@ class AccountRepositoryEloquent extends CommonRepositoryEloquent implements Acco
 
     public function create(array $attributes) {
         //验证可以在这里进行
+        $this->validator->with($attributes)->passesOrFail(ValidatorInterface::RULE_CREATE);
         $attributes['password'] = bcrypt($attributes['password']);
         return parent::create($attributes);
     }
