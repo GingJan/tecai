@@ -34,7 +34,7 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         try {
-            $res = $this->repository->listByLimit($request->getQuery());
+            $res = $this->repository->listByLimit($request->getQueryString());
 
             return $res;
 //            return $this->response()->collection($res, new StaffTransformer());
