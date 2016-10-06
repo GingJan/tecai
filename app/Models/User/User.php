@@ -4,6 +4,56 @@ namespace tecai\Models\User;
 
 use tecai\Models\System\Account;
 
+/**
+ * tecai\Models\User\User
+ *
+ * @property integer $id
+ * @property string $account
+ * @property string $username
+ * @property string $email
+ * @property string $phone
+ * @property boolean $age
+ * @property boolean $sex
+ * @property boolean $school_level
+ * @property string $school
+ * @property string $college
+ * @property string $major
+ * @property string $id_card
+ * @property string $native
+ * @property string $province
+ * @property string $city
+ * @property string $address
+ * @property integer $wants_job_id
+ * @property string $wants_job_name
+ * @property string $last_login_at
+ * @property string $last_login_ip
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\tecai\Models\System\Role[] $roles
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereAccount($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereUsername($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereEmail($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User wherePhone($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereAge($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereSex($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereSchoolLevel($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereSchool($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereCollege($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereMajor($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereIdCard($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereNative($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereProvince($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereCity($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereAddress($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereWantsJobId($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereWantsJobName($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereLastLoginAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereLastLoginIp($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\User\User whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class User extends Account
 {
     //如果不填该项，则数据表默认是模型名字的复数staffs

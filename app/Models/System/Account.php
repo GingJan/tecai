@@ -13,6 +13,18 @@ use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
+/**
+ * tecai\Models\System\Account
+ *
+ * @property integer $id
+ * @property string $account
+ * @property string $password
+ * @property-read \Illuminate\Database\Eloquent\Collection|\tecai\Models\System\Role[] $roles
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\System\Account whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\System\Account whereAccount($value)
+ * @method static \Illuminate\Database\Query\Builder|\tecai\Models\System\Account wherePassword($value)
+ * @mixin \Eloquent
+ */
 class Account extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract,Transformable
 {
     use Authenticatable, Authorizable, CanResetPassword, TransformableTrait,
