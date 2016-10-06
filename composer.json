@@ -31,7 +31,10 @@
         ],
         "psr-4": {
             "tecai\\": "app/"
-        }
+        },
+        "files": [
+            "app/Helpers/Helpers.php"
+        ]
     },
     "autoload-dev": {
         "classmap": [
