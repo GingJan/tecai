@@ -11,4 +11,10 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 abstract class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests, Helpers;
+    protected function created($id = null, $content = null) {
+        if( !is_null($id) ) {
+            $id = app('api.url')->version(env('API_VERSION', 'v1'))->current() . '/' . $id;
+        }
+        return $this->response()->created($id, $content);
+    }
 }
