@@ -10,6 +10,10 @@ class Industry extends Model implements Transformable
 {
     use TransformableTrait;
 
-    protected $fillable = [];
+    protected $fillable = ['name'];
+
+    protected $table = 'industries';
+
+    protected $guarded = ['id','created_at'];
 
 }

@@ -6,9 +6,24 @@ use Illuminate\Http\Request;
 
 use tecai\Http\Requests;
 use tecai\Http\Controllers\Controller;
+use tecai\Repositories\Interfaces\User\IndustryRepository;
+use tecai\Transformers\IndustryTransformer;
 
 class IndustryController extends Controller
 {
+    /**
+     * @var IndustryRepository
+     */
+    private $repository;
+
+    /**
+     * @param IndustryRepository $industryRepository
+     */
+    public function __construct(IndustryRepository $industryRepository)
+    {
+        $this->repository = $industryRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +31,7 @@ class IndustryController extends Controller
      */
     public function index()
     {
-        //
+        return $this->response()->paginator($this->repository->paginate(), new IndustryTransformer());
     }
 
     /**
@@ -27,7 +42,8 @@ class IndustryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $model = $this->repository->create($request->all());
+        return $this->created($model->id);
     }
 
     /**
@@ -38,7 +54,7 @@ class IndustryController extends Controller
      */
     public function show($id)
     {
-        //
+        return $this->response()->item($this->repository->find($id), new IndustryTransformer());
     }
 
     /**
@@ -50,7 +66,8 @@ class IndustryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->repository->update($request->all(), $id);
+        return $this->response()->noContent();
     }
 
     /**
@@ -61,6 +78,7 @@ class IndustryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->repository->delete($id);
+        return $this->response()->noContent();
     }
 }
