@@ -47,7 +47,7 @@ class JobController extends Controller {
     public function store(Request $request)
     {
         $model = $this->repository->create($request->all());
-        return $this->created($model->id);
+        return $this->response()->created(generateResourceURI() . '/' . $model->id);
     }
 
     /**
