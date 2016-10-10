@@ -19,10 +19,10 @@ class IndustryRepositoryEloquent extends CommonRepositoryEloquent implements Ind
 {
     protected $rules = [
         ValidatorInterface::RULE_CREATE => [
-            'name' => ['required', 'max:31'],
+            'name' => ['required', 'max:31', 'unique:industries'],
         ],
         ValidatorInterface::RULE_UPDATE => [
-            'name' => ['sometimes', 'max:31'],
+            'name' => ['sometimes', 'max:31', 'unique:industries'],
         ],
     ];
 
