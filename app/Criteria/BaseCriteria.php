@@ -26,14 +26,16 @@ class BaseCriteria implements CriteriaInterface {
      * @return mixed
      */
     public function apply($model, RepositoryInterface $repository) {
-        $valid = array_allow($repository->getFieldsSearchable(), $this->request->query());
+        $reachable = $repository->getFieldsSearchable();
+        $query = $this->request->query();
+        $valid = array_allow($reachable, $query);
         $valid = array_map([$this, 'extractOperator'], $valid);
         foreach($valid as $field => $value) {
             $model = $model->where($field, $value['operator'], $value['value']);
         }
 
-        $query['sortedBy'] = empty($query['sortedBy']) ? 'created_at' : $query['sortedBy'];
-        $query['orderBy'] = empty($query['orderBy'])? 'DESC' : $query['orderBy'];
+        $query['sortedBy'] = !empty($query['sortedBy']) && in_array($query['sortedBy'], $reachable) ? $query['sortedBy'] : 'created_at';
+        $query['orderBy'] = !empty($query['orderBy']) && strtoupper($query['orderBy']) !== 'ASC' ? 'DESC' : 'ASC';
 
         $model = $model->orderBy($query['sortedBy'], $query['orderBy']);
 
