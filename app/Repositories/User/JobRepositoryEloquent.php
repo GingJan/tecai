@@ -5,6 +5,7 @@ namespace tecai\Repositories\User;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Validator\Contracts\ValidatorInterface;
+use tecai\Criteria\BaseCriteria;
 use tecai\Repositories\Interfaces\User\JobRepository;
 use tecai\Models\User\Job;
 use tecai\Repositories\CommonRepositoryEloquent;
@@ -101,7 +102,7 @@ class JobRepositoryEloquent extends CommonRepositoryEloquent implements JobRepos
      */
     public function boot()
     {
-        $this->pushCriteria(app('tecai\Criteria\BaseCriteria'));
+        $this->pushCriteria(app(BaseCriteria::class));
     }
 
     public function create(array $job) {

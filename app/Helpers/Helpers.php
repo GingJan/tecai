@@ -27,3 +27,13 @@ if(! function_exists('array_unallow')) {
         return array_diff_key($haystack, $unallowed);
     }
 }
+
+if(! function_exists('generateResourceURI')) {
+    /**
+     * 返回当前请求资源的URI
+     * @return string
+     */
+    function generateResourceURI() {
+        return app('api.url')->version(env('API_VERSION', 'v1'))->current();
+    }
+}
