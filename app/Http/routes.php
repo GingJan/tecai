@@ -54,5 +54,12 @@ DingoRoute::group(['namespace' => 'User'], function($dgRoute) {
         $dgRoute->delete('/{id}', 'JobController@destroy');
     });
 
+    $dgRoute->group(['prefix' => 'industries'], function () use ($dgRoute) {
+        $dgRoute->get('/', 'IndustryController@index');
+        $dgRoute->get('/{id}', 'IndustryController@show');
+        $dgRoute->post('/', 'IndustryController@store');
+        $dgRoute->match(['put', 'patch'], '/{id}', 'IndustryController@update');
+        $dgRoute->delete('/{id}', 'IndustryController@destroy');
+    });
 
 });
