@@ -20,7 +20,7 @@ abstract class BaseTransformer extends TransformerAbstract
             is_numeric($v)? $model->$k = intval($v) : false;
         }
 
-        $transformData = $this->transformData($model);
+        $transformData = $this->transformData($model, $temp);
 
         $data = array_filter($transformData, function($value) {//array_filter，对数组中每个元素进行映射
             if(is_null($value)) {
@@ -38,6 +38,6 @@ abstract class BaseTransformer extends TransformerAbstract
         return $data;
     }
 
-    abstract protected function transformData($model);//由各子类实现
+    abstract protected function transformData($model, $modelToArray);//由各子类实现
 
 }
