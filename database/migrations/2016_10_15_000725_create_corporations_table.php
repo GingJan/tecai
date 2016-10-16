@@ -18,8 +18,11 @@ class CreateCorporationsTable extends Migration
             $table->unsignedInteger('legal_person_id');//法人id
             $table->string('legal_person_name',7);//法人名
             $table->string('name', 15);//企业名
+            $table->string('intro',1022)->default('');//简介
             $table->string('logo_img',127);//logo
             $table->string('city',63);//企业所在城市
+            $table->string('phone',16)->default('');//企业电话
+            $table->string('email',31)->default('');//企业邮箱
             $table->string('address',15);//企业地址
             $table->string('business');//企业经营的服务
             $table->string('tag_name',63)->default('');//标签名
@@ -31,6 +34,7 @@ class CreateCorporationsTable extends Migration
             $table->string('others',15)->default('');//其他
             $table->string('industry', 15);//行业
             $table->string('financing', 15);//融资,种子轮，天使轮，A，B，C，D，E轮，不需要融资
+            $table->string('official_website', 31)->default('');//官网
             $table->string('corporation_type',7);//企业类型：上市企业，大型企业，中小型企业，初创
             $table->boolean('is_listing',15)->default(0);//是否上市
             $table->boolean('is_authentication')->default(0);//企业是否被认证
