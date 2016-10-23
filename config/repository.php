@@ -222,6 +222,7 @@ return [
     'generator'  => [
         'basePath'      => app_path(),
         'rootNamespace' => 'tecai\\',
+        'stubsOverridePath' => app_path(),
         'paths'         => [
             'models'       => 'Models',
             'repositories' => 'Repositories',
@@ -232,7 +233,6 @@ return [
             'controllers'  => 'Http/Controllers',
             'provider'     => 'RepositoryServiceProvider',
             'criteria'     => 'Criteria',
-            'stubsOverridePath' => app_path()
         ]
     ]
 ];
