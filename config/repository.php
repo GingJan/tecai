@@ -152,6 +152,7 @@ return [
     |
     */
     'criteria'   => [
+        'baseCriteria' => \tecai\Criteria\BaseCriteria::class,
         /*
         |--------------------------------------------------------------------------
         | Accepted Conditions

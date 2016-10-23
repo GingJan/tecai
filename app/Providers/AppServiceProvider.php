@@ -8,9 +8,11 @@ use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
+use Prettus\Repository\Contracts\CriteriaInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use tecai\Criteria\BaseCriteria;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -53,6 +55,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton(CriteriaInterface::class, config('repository.criteria.baseCriteria', BaseCriteria::class));
         $this->app->register(RepositoryServiceProvider::class);//项目内自定义的SP
 //        $this->app->register(TransformerServiceProvider::class);
 //        $this->app->register();
