@@ -2,12 +2,11 @@
 
 $NAMESPACE$
 
-use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Contracts\CriteriaInterface;
 use $REPOSITORY$
 use $MODEL$;
 use tecai\Repositories\CommonRepositoryEloquent;
-$USE_VALIDATOR$
+//$USE_VALIDATOR$
 
 /**
  * Class $CLASS$RepositoryEloquent
