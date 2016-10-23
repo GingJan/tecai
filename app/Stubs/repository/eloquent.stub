@@ -3,6 +3,7 @@
 $NAMESPACE$
 
 use Prettus\Repository\Contracts\CriteriaInterface;
+use Prettus\Validator\Contracts\ValidatorInterface;
 use $REPOSITORY$
 use $MODEL$;
 use tecai\Repositories\CommonRepositoryEloquent;
