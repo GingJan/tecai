@@ -1,0 +1,15 @@
+<?php
+
+$NAMESPACE$
+
+use Prettus\Repository\Contracts\RepositoryInterface;
+use tecai\Repositories\Interfaces\CommonRepository;
+
+/**
+ * Interface $CLASS$Repository
+ * @package $NAMESPACE$
+ */
+interface $CLASS$Repository extends RepositoryInterface, CommonRepository
+{
+    //
+}
