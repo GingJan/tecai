@@ -38,8 +38,8 @@ class CorporationRepositoryEloquent extends CommonRepositoryEloquent implements 
             'intro' => ['sometimes', 'max:1022'],
             'official_website' => ['sometimes', 'between:1,31'],
             'is_listing' => ['required','boolean'],
-            'is_authentication' => ['required','boolean'],
-            'is_shown' => ['required','boolean'],
+            'is_authentication' => ['sometimes','boolean'],
+            'is_shown' => ['sometimes','boolean'],
         ],
         ValidatorInterface::RULE_UPDATE => [
             'legal_person_id' => ['required', 'numeric'],
@@ -62,8 +62,8 @@ class CorporationRepositoryEloquent extends CommonRepositoryEloquent implements 
             'intro' => ['sometimes', 'max:1022'],
             'official_website' => ['sometimes', 'between:1,31'],
             'is_listing' => ['required','boolean'],
-            'is_authentication' => ['required','boolean'],
-            'is_shown' => ['required','boolean'],
+            'is_authentication' => ['sometimes','boolean'],
+            'is_shown' => ['sometimes','boolean'],
         ],
     ];
 
@@ -116,6 +116,20 @@ class CorporationRepositoryEloquent extends CommonRepositoryEloquent implements 
     public function boot()
     {
         $this->pushCriteria(app(BaseCriteria::class));
+    }
+
+    public function create(array $corporation) {
+        $corporation['status'] = Corporation::APPROVAL;
+        $corporation['tag_name'] = !empty($corporation['tag_name']) ? $corporation['tag_name'] : '';
+        $corporation['tag_id'] = !empty($corporation['tag_id']) ? $corporation['tag_id'] : '';
+        $corporation['phone'] = !empty($corporation['phone']) ? $corporation['phone'] : '';
+        $corporation['email'] = !empty($corporation['email']) ? $corporation['email'] : '';
+        $corporation['others'] = !empty($corporation['others']) ? $corporation['others'] : '';
+        $corporation['intro'] = !empty($corporation['intro']) ? $corporation['intro'] : '';
+        $corporation['official_website'] = !empty($corporation['official_website']) ? $corporation['official_website'] : '';
+        $corporation['is_authentication'] = empty($corporation['is_authentication']) ? Corporation::AUTHENTICATION_NONE : Corporation::AUTHENTICATION_YES;
+        $corporation['is_shown'] = empty($corporation['is_shown']) ? Corporation::HIDDEN : Corporation::SHOWN;
+        return parent::create($corporation);
     }
 
 }
