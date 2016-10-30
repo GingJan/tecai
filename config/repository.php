@@ -210,6 +210,11 @@ return [
             'orderBy'      => 'orderBy',
             'sortedBy'     => 'sortedBy',
             'with'         => 'with'
+        ],
+
+        'defaultField' => [
+            'orderBy'   =>  'id',
+            'sortedBy'  =>  'DESC',
         ]
     ],
     /*
