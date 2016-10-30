@@ -27,4 +27,6 @@ class Tag extends Model implements Transformable
 
     const Organization = 10; //企业/组织结构 使用的标签
     const User = 20; //用户使用的标签
+
+    public $timestamps = false;
 }
