@@ -11,7 +11,6 @@ class CorporationTableSeeder extends Seeder
      */
     public function run()
     {
-        //
-        factory(\tecai\Models\Organization\Corporation::class, 50)->create();
+        factory(\tecai\Models\Organization\Corporation::class, 10)->create();
     }
 }
