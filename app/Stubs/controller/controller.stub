@@ -1,0 +1,86 @@
+<?php
+
+$NAMESPACE$
+
+use Illuminate\Http\Request;
+use $APPNAME$Http\Controllers\Controller;
+use $APPNAME$Http\Requests;
+$REPOSITORY$
+use tecai\Transformers\$CLASSTransformer;
+
+class $CONTROLLER$Controller extends Controller
+{
+
+    /**
+     * @var $CLASS$Repository
+     */
+    protected $repository;
+
+    public function __construct($CLASS$Repository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * $param \tecai\Transformers\$CLASSTransformer $transformer;
+     * @return \Illuminate\Http\Response
+     */
+    public function index($CLASSTransformer $transformer)
+    {
+        return $this->response()->paginator($this->repository->paginate(), $transformer);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $model = $this->repository->create($request->all());
+        return $this->created($model->id);
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param int|string $id
+     * $param \tecai\Transformers\$CLASSTransformer $transformer;
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id, $CLASSTransformer $transformer)
+    {
+        return $this->response()->item($this->repository->find($id), $transformer);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int|string            $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $this->repository->update($request->all(), $id);
+        return $this->response()->noContent();
+    }
+
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int|string $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $this->repository->delete($id);
+        return $this->response()->noContent();
+    }
+}
