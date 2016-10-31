@@ -35,7 +35,7 @@ class CreateCorporationsTable extends Migration
             $table->boolean('is_listing')->default(0);//是否上市
             $table->boolean('is_authentication')->default(0);//企业是否被认证
             $table->boolean('is_shown')->default(1);//是否显示，由法人/企业员工决定
-            $table->unsignedTinyInteger('status')->default(10);//当前状态,10：审核中/待审核，20：正常/审核通过，30：禁止（从正常转为禁止），40：审核不通过
+            $table->unsignedTinyInteger('status')->default(10);//当前状态,10：创建后-待审核，15：修改后-待审核，20：正常/审核通过，30：禁止（从正常转为禁止），40：审核不通过
             $table->unsignedMediumInteger('staff_num');//员工数
             $table->timestamps();
 
