@@ -63,3 +63,13 @@ DingoRoute::group(['namespace' => 'User'], function($dgRoute) {
     });
 
 });
+
+DingoRoute::group(['namespace' => 'Organization'], function($dgRoute) {
+    $dgRoute->group(['prefix' => 'corporations'], function () use ($dgRoute) {
+        $dgRoute->get('/', 'CorporationController@index');
+        $dgRoute->get('/{id}', 'CorporationController@show');
+        $dgRoute->post('/', 'CorporationController@store');
+        $dgRoute->match(['put', 'patch'], '/{id}', 'CorporationController@update');
+        $dgRoute->delete('/{id}', 'CorporationController@destroy');
+    });
+});
