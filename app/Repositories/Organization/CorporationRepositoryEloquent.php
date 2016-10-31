@@ -132,16 +132,6 @@ class CorporationRepositoryEloquent extends CommonRepositoryEloquent implements 
 
     public function update(array $corporation, $id)
     {
-        $corporation['status'] = Corporation::CREATE_APPROVAL;
-        $corporation['tag_name'] = !empty($corporation['tag_name']) ? $corporation['tag_name'] : '';
-        $corporation['tag_id'] = !empty($corporation['tag_id']) ? $corporation['tag_id'] : '';
-        $corporation['phone'] = !empty($corporation['phone']) ? $corporation['phone'] : '';
-        $corporation['email'] = !empty($corporation['email']) ? $corporation['email'] : '';
-        $corporation['others'] = !empty($corporation['others']) ? $corporation['others'] : '';
-        $corporation['intro'] = !empty($corporation['intro']) ? $corporation['intro'] : '';
-        $corporation['official_website'] = !empty($corporation['official_website']) ? $corporation['official_website'] : '';
-        $corporation['is_authentication'] = empty($corporation['is_authentication']) ? Corporation::AUTHENTICATION_NONE : Corporation::AUTHENTICATION_YES;
-        $corporation['is_shown'] = empty($corporation['is_shown']) ? Corporation::HIDDEN : Corporation::SHOWN;
         return parent::update($corporation, $id);
     }
 
