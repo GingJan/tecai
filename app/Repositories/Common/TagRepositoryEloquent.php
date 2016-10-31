@@ -61,7 +61,7 @@ class TagRepositoryEloquent extends CommonRepositoryEloquent implements TagRepos
     public function create(array $attr) {
         //Code goes here
         $attr['type'] = !empty($attr['type']) && Tag::Organization == $attr['type'] ? Tag::Organization : Tag::User;
-        parent::create($attr);
+        return parent::create($attr);
     }
 
 }
