@@ -32,7 +32,7 @@ class CreateCorporationsTable extends Migration
             $table->string('industry', 15);//行业
             $table->string('financing', 15);//融资,种子轮，天使轮，A，B，C，D，E轮，不需要融资
             $table->string('corporation_type',7);//企业类型：上市企业，大型企业，中小型企业，初创
-            $table->boolean('is_listing',15)->default(0);//是否上市
+            $table->boolean('is_listing')->default(0);//是否上市
             $table->boolean('is_authentication')->default(0);//企业是否被认证
             $table->boolean('is_shown')->default(1);//是否显示，由法人/企业员工决定
             $table->unsignedTinyInteger('status')->default(10);//当前状态,10：审核中/待审核，20：正常/审核通过，30：禁止（从正常转为禁止），40：审核不通过
