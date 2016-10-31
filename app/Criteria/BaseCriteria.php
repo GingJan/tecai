@@ -34,10 +34,10 @@ class BaseCriteria implements CriteriaInterface {
             $model = $model->where($field, $value['operator'], $value['value']);
         }
 
-        $query['sortedBy'] = !empty($query['sortedBy']) && in_array($query['sortedBy'], $reachable) ? $query['sortedBy'] : config('repository.criteria.defaultField.sortedBy', 'id');
-        $query['orderBy'] = !empty($query['orderBy']) && strtoupper($query['orderBy']) !== 'ASC' ? 'DESC' : 'ASC';
+        $query['orderBy'] = !empty($query['orderBy']) && in_array($query['orderBy'], $reachable) ? $query['sortedBy'] : config('repository.criteria.defaultField.orderBy', 'id');
+        $query['sortedBy'] = !empty($query['sortedBy']) && strtoupper($query['sortedBy']) !== 'ASC' ? 'DESC' : 'ASC';
 
-        $model = $model->orderBy($query['sortedBy'], $query['orderBy']);
+        $model = $model->orderBy($query['orderBy'], $query['sortedBy']);
 
         //在BaseRepository有一句：$this->model = $c->apply($this->model, $this);，因此必须返回$model对象
         return $model;
