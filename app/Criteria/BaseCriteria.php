@@ -34,7 +34,7 @@ class BaseCriteria implements CriteriaInterface {
             $model = $model->where($field, $value['operator'], $value['value']);
         }
 
-        $query['orderBy'] = !empty($query['orderBy']) && in_array($query['orderBy'], $reachable) ? $query['sortedBy'] : config('repository.criteria.defaultField.orderBy', 'id');
+        $query['orderBy'] = !empty($query['orderBy']) && in_array($query['orderBy'], $reachable) ? $query['orderBy'] : config('repository.criteria.defaultField.orderBy', 'id');
         $query['sortedBy'] = !empty($query['sortedBy']) && strtoupper($query['sortedBy']) !== 'ASC' ? 'DESC' : 'ASC';
 
         $model = $model->orderBy($query['orderBy'], $query['sortedBy']);
