@@ -64,6 +64,15 @@ DingoRoute::group(['namespace' => 'User'], function($dgRoute) {
 
 });
 
+DingoRoute::group(['namespace' => 'Common'], function($dgRoute) {
+    $dgRoute->group(['prefix' => 'tags'], function () use ($dgRoute) {
+        $dgRoute->get('/', 'TagController@index');
+        $dgRoute->get('/{id}', 'TagController@show');
+        $dgRoute->post('/', 'TagController@store');
+        $dgRoute->delete('/{id}', 'TagController@destroy');
+    });
+});
+
 DingoRoute::group(['namespace' => 'Organization'], function($dgRoute) {
     $dgRoute->group(['prefix' => 'corporations'], function () use ($dgRoute) {
         $dgRoute->get('/', 'CorporationController@index');
