@@ -14,10 +14,12 @@ class EntrustSetupTables extends Migration
         // Create table for storing roles
         Schema::create('roles', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->unique();
-            $table->string('display_name')->nullable();
-            $table->string('description')->nullable();
+            $table->string('name', 31)->unique();
+            $table->string('display_name', 63)->nullable()->default('');
+            $table->string('description', 255)->nullable()->default('');
             $table->timestamps();
+
+            $table->engine = 'MyISAM';
         });
 
         // Create table for associating roles to users (Many-to-Many)
@@ -31,15 +33,19 @@ class EntrustSetupTables extends Migration
                 ->onUpdate('cascade')->onDelete('cascade');
 
             $table->primary(['user_id', 'role_id']);
+
+            $table->engine = 'MyISAM';
         });
 
         // Create table for storing permissions
         Schema::create('permissions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->unique();
-            $table->string('display_name')->nullable();
-            $table->string('description')->nullable();
+            $table->string('name', 31)->unique();
+            $table->string('display_name', 63)->nullable()->default('');
+            $table->string('description', 255)->nullable()->default('');
             $table->timestamps();
+
+            $table->engine = 'MyISAM';
         });
 
         // Create table for associating permissions to roles (Many-to-Many)
@@ -53,6 +59,8 @@ class EntrustSetupTables extends Migration
                 ->onUpdate('cascade')->onDelete('cascade');
 
             $table->primary(['permission_id', 'role_id']);
+
+            $table->engine = 'MyISAM';
         });
     }
 
