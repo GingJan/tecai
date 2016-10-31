@@ -37,3 +37,18 @@ if(! function_exists('generateResourceURI')) {
         return app('api.url')->version(env('API_VERSION', 'v1'))->current();
     }
 }
+
+if(! function_exists('array_rand_element')) {
+    /**
+     * 返回随机数组元素，个数也是随机的
+     * @param array $seed 种子数组
+     * @return array 随机数组
+     */
+    function array_rand_element(array $seed) {
+        $keys = array_rand($seed, mt_rand(1, count($seed)));
+        return array_map(function($key) use ($seed) {
+            return $seed[$key];
+        }, $keys);
+    }
+
+}
