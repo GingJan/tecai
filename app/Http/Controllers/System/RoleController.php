@@ -54,7 +54,10 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        return $this->response()->item($this->repository->find($id), new CommonTransformer());
+        if (is_numeric($id)) {
+            return $this->response()->item($this->repository->find($id), new CommonTransformer());
+        }
+        return $this->response()->item($this->repository->findOneByField('name', $id), new CommonTransformer());
     }
 
     /**
