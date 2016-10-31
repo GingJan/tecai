@@ -10,11 +10,19 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use tecai\Http\Requests;
 use tecai\Http\Controllers\Controller;
 use tecai\Repositories\Interfaces\System\PermissionRepository;
+use tecai\Transformers\CommonTransformer;
 
 class PermissionController extends Controller
 {
+    /**
+     * @var PermissionRepository
+     */
     protected $repository;
 
+    /**
+     * @param PermissionRepository $permissionRepository
+     *
+     */
     public function __construct(PermissionRepository $permissionRepository) {//注入仓库接口
         $this->repository = $permissionRepository;
     }
@@ -26,22 +34,8 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        try {
-            return $this->repository->all();
-        } catch(\Exception $e) {
-            $this->response->errorNotFound($e->getMessage());
-            throw new NotFoundHttpException($e->getMessage());
-        }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        //根据id查询，角色名查询，描述查询
+        return $this->response()->paginator($this->repository->paginate(),new CommonTransformer());
     }
 
     /**
@@ -52,11 +46,8 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            return $this->repository->create($request->all());
-        } catch (ValidatorException $e) {
-            throw new BadRequestHttpException($e->getMessageBag());
-        }
+        $model = $this->repository->create($request->all());
+        return $this->response()->created(generateResourceURI() . '/' .$model->id);
     }
 
     /**
@@ -67,22 +58,10 @@ class PermissionController extends Controller
      */
     public function show($id)
     {
-        try {
-            return $this->repository->find($id);
-        } catch (\Exception $e) {
-            throw new NotFoundHttpException($e->getMessage());
+        if (is_numeric($id)) {
+            return $this->response()->item($this->repository->find($id), new CommonTransformer());
         }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Request $request,$id)
-    {
-
+        return $this->response()->item($this->repository->findOneByField('name', $id), new CommonTransformer());
     }
 
     /**
@@ -94,13 +73,8 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try {
-            return $this->repository->update($request->all(), $id);
-        } catch (ValidatorException $e) {
-            throw new BadRequestHttpException($e->getMessageBag());
-        } catch (\Exception $e) {
-            throw new NotFoundHttpException($e->getMessage());
-        }
+        $this->repository->update($request->all(), $id);
+        return $this->response()->noContent();
     }
 
     /**
@@ -111,10 +85,7 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $this->repository->delete($id);
-        } catch (\Exception $e) {
-            throw new NotFoundHttpException($e->getMessage());
-        }
+        $this->repository->delete($id);
+        return $this->response()->noContent();
     }
 }
