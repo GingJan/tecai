@@ -30,7 +30,7 @@ class Role extends EntrustRole implements Transformable
 {
     use TransformableTrait;
 
-//    protected $table = 'roles';
+    protected $table = 'roles';
 
     protected $fillable = ['name','display_name','description'];
 

@@ -29,6 +29,8 @@ class Permission extends EntrustPermission implements Transformable
 {
     use TransformableTrait;
 
+    protected $table = 'permissions';
+
     protected $fillable = ['name', 'display_name', 'description'];
 
 
