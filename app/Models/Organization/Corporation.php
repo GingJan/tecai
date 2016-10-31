@@ -65,7 +65,8 @@ class Corporation extends Model implements Transformable
 {
     use TransformableTrait;
 
-    const APPROVAL  = 10;//待审核
+    const CREATE_APPROVAL  = 10;//新建-待审核
+    const UPDATE_APPROVAL = 15;//修改-待审核
     const NORMAL    = 20;//正常/通过审核
     const BANNED    = 30;//禁止
     const ILLEGAL   = 40;//审核不通过
