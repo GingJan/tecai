@@ -50,7 +50,7 @@ $factory->define(tecai\Models\Organization\Corporation::class, function () use (
 //    exit;
     return [
         'legal_person_id' => $legal_person_id,
-        'legal_person_name' => 'John Corner' . $legal_person_id,
+        'legal_person_name' => 'John' . $legal_person_id,
         'name' => 'JC company' . $legal_person_id,
         'logo_img' => 'logopic',
         'city' => $faker->city,
