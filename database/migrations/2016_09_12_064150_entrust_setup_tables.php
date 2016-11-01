@@ -19,7 +19,6 @@ class EntrustSetupTables extends Migration
             $table->string('description', 255)->nullable()->default('');
             $table->timestamps();
 
-            $table->engine = 'MyISAM';
         });
 
         // Create table for associating roles to users (Many-to-Many)
@@ -34,7 +33,6 @@ class EntrustSetupTables extends Migration
 
             $table->primary(['user_id', 'role_id']);
 
-            $table->engine = 'MyISAM';
         });
 
         // Create table for storing permissions
@@ -45,7 +43,6 @@ class EntrustSetupTables extends Migration
             $table->string('description', 255)->nullable()->default('');
             $table->timestamps();
 
-            $table->engine = 'MyISAM';
         });
 
         // Create table for associating permissions to roles (Many-to-Many)
@@ -60,7 +57,6 @@ class EntrustSetupTables extends Migration
 
             $table->primary(['permission_id', 'role_id']);
 
-            $table->engine = 'MyISAM';
         });
     }
 
