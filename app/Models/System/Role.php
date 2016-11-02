@@ -5,6 +5,7 @@ namespace tecai\Models\System;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
+use tecai\Observers\RoleObserver;
 use Zizaco\Entrust\EntrustRole;
 
 /**
@@ -34,4 +35,12 @@ class Role extends EntrustRole implements Transformable
 
     protected $fillable = ['name','display_name','description'];
 
+    public static function boot() {
+        parent::boot();
+        static::observe(app(RoleObserver::class));
+    }
+
+    public function getPermissions() {
+        return $this->belongsToMany(Permission::class, 'permission_role', 'role_id', 'permission_id');
+    }
 }

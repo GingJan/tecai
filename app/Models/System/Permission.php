@@ -33,5 +33,8 @@ class Permission extends EntrustPermission implements Transformable
 
     protected $fillable = ['name', 'display_name', 'description'];
 
+    public function getRoles() {
+        return $this->belongsToMany(Role::class, 'permission_role', 'permission_id', 'role_id');
+    }
 
 }
