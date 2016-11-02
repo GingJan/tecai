@@ -17,6 +17,7 @@ class CreateAccountsTable extends Migration
             $table->increments('id');
             $table->string('account',31)->unique();
             $table->char('password',60);
+            $table->unsignedTinyInteger('type');//账号类型：普通用户、企业/机构用户，管理员...
 //            $table->unique(['account']);//两种方式建立索引
 		});
 	}
