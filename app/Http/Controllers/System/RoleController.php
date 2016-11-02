@@ -4,8 +4,12 @@ namespace tecai\Http\Controllers\System;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
 use tecai\Http\Requests;
 use tecai\Http\Controllers\Controller;
+use tecai\Models\System\Permission;
+use tecai\Models\System\Role;
+use tecai\Repositories\Interfaces\System\PermissionRepository;
 use tecai\Repositories\Interfaces\System\RoleRepository;
 use tecai\Transformers\CommonTransformer;
 
@@ -42,8 +46,14 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $model = $this->repository->create($request->all());
-        return $this->response()->created(generateResourceURI() . '/' .$model->id);
+        $input = $request->all();
+        $role = DB::transaction(function($db) use ($input) {
+            //该闭包内的逻辑都处于事务中
+            $role = $this->repository->create($input);
+            //权限添加在模型观察器中处理。
+            return $role;
+        });
+        return $this->response()->created(generateResourceURI() . '/' .$role->id);
     }
 
     /**
@@ -54,10 +64,9 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        if (is_numeric($id)) {
-            return $this->response()->item($this->repository->find($id), new CommonTransformer());
-        }
-        return $this->response()->item($this->repository->findOneByField('name', $id), new CommonTransformer());
+        $role = $this->repository->with('permissions');
+        $role = is_numeric($id) ? $role->find($id) : $role->findOneByField('name', $id);
+        return $this->response()->item($role, new CommonTransformer());
     }
 
     /**
@@ -69,7 +78,12 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->repository->update($request->all(), $id);
+        $input = $request->all();
+
+        DB::transaction(function($db) use ($input, $id) {
+            return $this->repository->update($input, $id);
+        });
+
         return $this->response()->noContent();
     }
 
