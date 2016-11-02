@@ -25,6 +25,14 @@ DingoRoute::group(['namespace' => 'System'], function($dgRoute) {
             $dgRoute->delete('/{id}', 'RoleController@destroy');
         });
 
+    $dgRoute->group(['prefix' => 'permissions'], function () use ($dgRoute) {
+        $dgRoute->get('/', 'PermissionController@index');
+        $dgRoute->get('/{id}', 'PermissionController@show');
+        $dgRoute->post('/', 'PermissionController@store');
+        $dgRoute->match(['put', 'patch'], '/{id}', 'PermissionController@update');
+        $dgRoute->delete('/{id}', 'PermissionController@destroy');
+    });
+
         $dgRoute->group(['prefix' => 'admins'], function () use ($dgRoute) {
             $dgRoute->get('/', 'AdminController@index');
             $dgRoute->get('/{id}', 'AdminController@show');
