@@ -1,6 +1,7 @@
 <?php
 namespace tecai\Repositories;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Events\RepositoryEntityDeleted;
 use tecai\Models\User\Job;
@@ -29,7 +30,11 @@ abstract class CommonRepositoryEloquent extends BaseRepository implements Common
      * @return mixed
      */
     public function findOneByField($field, $value = null, $columns = ['*']) {
-        return parent::findByField($field,$value,$columns)->first();
+        $model = parent::findByField($field,$value,$columns)->first();
+        if( is_null($model) ) {
+            throw (new ModelNotFoundException)->setModel(get_class($this->model));
+        }
+        return $model;
     }
 
 
@@ -55,7 +60,7 @@ abstract class CommonRepositoryEloquent extends BaseRepository implements Common
         $temporarySkipPresenter = $this->skipPresenter;
         $this->skipPresenter(true);
 
-        $model = $this->findByField($field, $value, [$field]);//修改了这里，不一定非要通过主键id删除
+        $model = $this->model->where($field, '=', $value)->firstOrFail([$field]);//修改了这里，不一定非要通过主键id删除
         $originalModel = clone $model;
 
         $this->skipPresenter($temporarySkipPresenter);
