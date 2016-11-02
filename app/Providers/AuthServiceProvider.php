@@ -4,6 +4,8 @@ namespace tecai\Providers;
 
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use tecai\Models\Organization\Corporation;
+use tecai\Policies\CorporationPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -14,6 +16,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'tecai\Model' => 'tecai\Policies\ModelPolicy',
+        Corporation::class => CorporationPolicy::class,
     ];
 
     /**
