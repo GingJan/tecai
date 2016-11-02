@@ -34,10 +34,15 @@ class EntrustSetupTables extends Migration
         Schema::create('permissions', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 31)->unique();
-            $table->string('display_name', 63)->nullable()->default('');
-            $table->string('description', 255)->nullable()->default('');
+            $table->string('verb',10);//对应资源的动作GET、POST、PUT/PATCH、DELETE
+            $table->string('uri', 255);//对应资源的uri
+            $table->unsignedTinyInteger('type');//私有，角色，公有
+            $table->boolean('status')->default(0);//该 资源/权限 是否暂时关闭访问
+            $table->string('display_name', 63)->default('');
+            $table->string('description', 255)->default('');
             $table->timestamps();
 
+            $table->unique(['verb', 'uri'], 'verb_uri_unique');
         });
 
         // Create table for associating permissions to roles (Many-to-Many)
