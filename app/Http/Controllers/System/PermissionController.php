@@ -58,10 +58,8 @@ class PermissionController extends Controller
      */
     public function show($id)
     {
-        if (is_numeric($id)) {
-            return $this->response()->item($this->repository->find($id), new CommonTransformer());
-        }
-        return $this->response()->item($this->repository->findOneByField('name', $id), new CommonTransformer());
+        $permission = is_numeric($id) ? $this->repository->find($id) : $this->repository->findOneByField('name', $id);
+        return $this->response()->item($permission, new CommonTransformer());
     }
 
     /**
