@@ -74,3 +74,23 @@ $factory->define(tecai\Models\Organization\Corporation::class, function () use (
     ];
 });
 
+$factory->define(tecai\Models\System\Role::class, function () use ($faker) {
+//    $roles = array_rand_element(['admin', 'user']);
+//    $role = last($roles);
+    return [
+        'name' => 'admin',
+        'display_name' => 'platform Admin',
+        'description' => 'the guy to admin the platform'
+    ];
+});
+
+$factory->define(tecai\Models\System\Permission::class, function () use ($faker) {
+//    $roles = array_rand_element(['admin', 'user']);
+//    $role = last($roles);
+    return [
+        'name' => 'create-staff',
+        'display_name' => 'Create Staff',
+        'description' => 'the permission to create a staff account'
+    ];
+});
+
