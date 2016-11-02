@@ -36,5 +36,7 @@ class Kernel extends HttpKernel
         'jwt.auth'  =>  \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
         'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
         'jwt_check' => \tecai\Http\Middleware\JWTCheck::class,//注册自定义的中间件
+
+        'permission_check' => \tecai\http\Middleware\PermCheck::class,
     ];
 }
