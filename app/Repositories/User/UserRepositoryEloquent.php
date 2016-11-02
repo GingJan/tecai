@@ -91,6 +91,7 @@ class UserRepositoryEloquent extends CommonRepositoryEloquent implements UserRep
     public function create(array $attributes) {
         //验证可以在这里进行
         $attributes['username'] = empty($attributes['username'])? $attributes['account'] : $attributes['username'];
+        $attributes['sex'] = !empty($attributes['sex']) && $attributes['sex'] == User::SEX_MALE ? User::SEX_MALE : User::SEX_FEMALE;
         $formatTime = date("Y-m-d H:i:s", $_SERVER['REQUEST_TIME']);
         $attributes['last_login_at']  = $formatTime;
         $attributes['last_login_ip'] = $_SERVER['REMOTE_ADDR'];

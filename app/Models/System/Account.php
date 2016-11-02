@@ -11,6 +11,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
+use tecai\Observers\AccountObserver;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
@@ -32,13 +33,22 @@ class Account extends Model implements AuthenticatableContract, AuthorizableCont
         EntrustUserTrait::can insteadof Authorizable;
     }
 
+    const TYPE_ADMIN = 10;
+    const TYPE_ORGANIZATION = 20;
+    const TYPE_USER = 30;
     protected $table = 'accounts';
 
     //白名单（服务于create批量插入，允许的字段），fillable与guarded不可同时使用
-    protected $fillable = ['account','password'];
+    protected $fillable = ['account','password','type'];
 
     protected $hidden = ['password'];
 
     public $timestamps = false;
 
+
+    public static function boot() {
+        parent::boot();
+
+        parent::observe(AccountObserver::class);
+    }
 }

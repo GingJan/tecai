@@ -36,8 +36,9 @@ class AppServiceProvider extends ServiceProvider
             }
             else if( $e instanceof ModelNotFoundException ) {
 //                throw new ResourceException($e->getMessage(), null, $e); //422
-                \DingoApi::response()->errorNotFound();
-//                return 'f';
+                $model = $e->getModel();
+                $model = substr($model, strrpos($model, '\\') + 1);
+                \DingoApi::response()->errorNotFound('The ' . $model . '(s) Not Found');
             }
 //            else if ( $e instanceof HttpException) {
 //                throw $e;

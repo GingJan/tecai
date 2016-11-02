@@ -56,7 +56,10 @@ use tecai\Models\System\Account;
  */
 class User extends Account
 {
-    //如果不填该项，则数据表默认是模型名字的复数staffs
+    const SEX_FEMALE = 0;
+    const SEX_MALE = 1;
+
+    //如果不填该项，则数据表默认是模型名字的复数users
     protected $table = 'users';
 
     //白名单（服务于create批量插入，允许的字段），fillable与guarded不可同时使用
@@ -82,7 +85,7 @@ class User extends Account
         'last_login_ip'
     ];
 
-    //黑名单（不允许一次性赋值的字段）
+    //不允许一次性赋值的字段
 //    protected $guarded = ['id','role','add_time','password','password_confirmation'];
 
     //protected $primaryKey = 'your_custom_primarykey' 默认为id

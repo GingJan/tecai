@@ -1,0 +1,85 @@
+<?php
+namespace DummyNamespace;
+
+class DummyClass
+{
+    /**
+     * @param ModelClass Model
+     */
+    public function saving(Model)
+    {
+
+    }
+
+    /**
+     * @param ModelClass Model
+     */
+    public function saved(Model)
+    {
+
+    }
+
+    /**
+     * @param ModelClass Model
+     */
+    public function creating(Model)
+    {
+
+    }
+
+    /**
+     * @param ModelClass Model
+     */
+    public function created(Model)
+    {
+
+    }
+
+    /**
+     * @param ModelClass Model
+     */
+    public function updating(Model)
+    {
+
+    }
+
+    /**
+     * @param ModelClass Model
+     */
+    public function updated(Model)
+    {
+
+    }
+
+    /**
+     * @param ModelClass Model
+     */
+    public function deleting(Model)
+    {
+
+    }
+
+    /**
+     * @param ModelClass Model
+     */
+    public function deleted(Model)
+    {
+
+    }
+
+    /**
+     * @param ModelClass Model
+     */
+    public function restoring(Model)
+    {
+
+    }
+
+    /**
+     * @param ModelClass Model
+     */
+    public function restored(Model)
+    {
+
+    }
+}
