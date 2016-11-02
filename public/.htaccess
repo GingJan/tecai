@@ -5,6 +5,10 @@
 
     RewriteEngine On
 
+    # 若不加这两句，那么将无法收到Authorization头，原因是Authorization在链接重写的时候没有附加在新的请求的请求头上。
+    RewriteCond %{HTTP:Authorization} ^(.*)
+    RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)/$ /$1 [L,R=301]
