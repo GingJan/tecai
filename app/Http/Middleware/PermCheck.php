@@ -3,7 +3,6 @@
 namespace tecai\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use tecai\Models\System\Account;
@@ -64,8 +63,4 @@ class PermCheck
         return '/' . $resource;
     }
 
-///bbb /前无东西，单/
-///bbb/3 /前有东西，双/
-///aaa/1/bbb/2 /前有东西，双，
-///aaa/2/bbb /前有东西，单/
 }
