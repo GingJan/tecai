@@ -30,7 +30,7 @@ abstract class CommonRepositoryEloquent extends BaseRepository implements Common
      * @return mixed
      */
     public function findOneByField($field, $value = null, $columns = ['*']) {
-        $model = parent::findByField($field,$value,$columns)->first();
+        $model = parent::findWhere([$field => $value] ,$columns)->first();
         if( is_null($model) ) {
             throw (new ModelNotFoundException)->setModel(get_class($this->model));
         }
