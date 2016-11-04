@@ -18,14 +18,33 @@ class RoleTableSeeder extends Seeder
         $users = Permission::where('name', 'like', '%users%')->get()->toArray();
         $tags = Permission::where('name', 'like', '%tags%')->get()->toArray();
 
-        factory(\tecai\Models\System\Role::class, 'root')->create();
+        \tecai\Models\System\Role::create([
+            'name' => 'root',
+            'display_name' => 'Super Admin',
+            'description' => 'the root account,Super Admin'
+        ]);
 
-        $roleAdmin = factory(\tecai\Models\System\Role::class, 'admin')->create();
+        $roleAdmin = \tecai\Models\System\Role::create([
+            'name' => 'admin',
+            'display_name' => 'platform Admin',
+            'description' => 'the guy to admin the platform'
+        ]);
         $this->attachPermission($roleAdmin, $clients, $corporations, $jobs, $users, $tags);
 
-        $roleLegaler = factory(\tecai\Models\System\Role::class, 'legaler')->create();
+
+        $roleLegaler = \tecai\Models\System\Role::create([
+            'name' => 'legaler',
+            'display_name' => 'corporation-legaler',
+            'description' => 'the corporation legal person'
+        ]);
         $this->attachPermission($roleLegaler, $corporations, $jobs, $users, $tags);
 
+        $roleStaff = \tecai\Models\System\Role::create([
+            'name' => 'staff',
+            'display_name' => 'corporation-staff',
+            'description' => 'the corporation staff'
+        ]);
+        $this->attachPermission($roleStaff, $corporations, $jobs, $users, $tags);
 
     }
 
@@ -36,7 +55,7 @@ class RoleTableSeeder extends Seeder
     protected function attachPermission($role) {
         $perms = func_get_args();
         array_shift($perms);
-//        dd($perms);
+
         foreach ($perms as $perm) {
             $method = 'attachPermission';
             $method = is_array($perm) ? $method . 's' : $method;
