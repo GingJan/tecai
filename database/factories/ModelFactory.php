@@ -12,6 +12,16 @@
 */
 $faker = Faker\Factory::create('zh_CN');
 
+//管理员
+$factory->define(tecai\Models\System\Admin::class, function () use ($faker) {
+    return [
+        'account' => 'root',
+        'username' => 'Super Admin',
+        'email' => '123456@qq.com',
+    ];
+});
+
+//普通用户
 $factory->define(tecai\Models\User\User::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
@@ -21,6 +31,8 @@ $factory->define(tecai\Models\User\User::class, function (Faker\Generator $faker
     ];
 });
 
+
+//标签
 $factory->define(tecai\Models\Common\Tag::class, function () use ($faker){
     return [
         'type' => mt_rand(1, 2) == 1 ? \tecai\Models\Common\Tag::Organization : \tecai\Models\Common\Tag::User,
@@ -28,12 +40,13 @@ $factory->define(tecai\Models\Common\Tag::class, function () use ($faker){
     ];
 });
 
+//企业/公司/机构/组织
 $factory->define(tecai\Models\Organization\Corporation::class, function () use ($faker) {
     $legal_person_id = mt_rand(1, 1000);
 
     $tags = \tecai\Models\Common\Tag::take(100)->get(['id','name']);
     $tag_name = [];
-    $tag_id = [];
+
     foreach( $tags as $tag) {
         $tag_name[] = $tag->name;
     }
@@ -47,7 +60,7 @@ $factory->define(tecai\Models\Organization\Corporation::class, function () use (
     $tag_id = implode(',', array_map(function($key) {
         return $key;
     }, $keys));
-//    exit;
+
     return [
         'legal_person_id' => $legal_person_id,
         'legal_person_name' => 'John' . $legal_person_id,
@@ -74,23 +87,4 @@ $factory->define(tecai\Models\Organization\Corporation::class, function () use (
     ];
 });
 
-$factory->define(tecai\Models\System\Role::class, function () use ($faker) {
-//    $roles = array_rand_element(['admin', 'user']);
-//    $role = last($roles);
-    return [
-        'name' => 'admin',
-        'display_name' => 'platform Admin',
-        'description' => 'the guy to admin the platform'
-    ];
-});
-
-$factory->define(tecai\Models\System\Permission::class, function () use ($faker) {
-//    $roles = array_rand_element(['admin', 'user']);
-//    $role = last($roles);
-    return [
-        'name' => 'create-staff',
-        'display_name' => 'Create Staff',
-        'description' => 'the permission to create a staff account'
-    ];
-});
 
