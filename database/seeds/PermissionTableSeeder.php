@@ -37,7 +37,7 @@ class PermissionTableSeeder extends Seeder
                 $name = $a . '-' . $r;
                 $verb = $v;
 
-                $r = $a == 'get-one' ? $r . '/{id}' : $r;
+                $r = $a == 'get-one' || $a == 'update' || $a == 'delete' ? $r . '/{id}' : $r;
                 $uri = '/' . $r;
 
                 $type = Permission::TYPE_PUBLIC;
