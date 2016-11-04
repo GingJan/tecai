@@ -8,3 +8,6 @@ _ide_helper.php
 .phpstorm.meta.php
 /config/debugbar.php
 /config/ide-helper.php
+
+app/Providers/TransformerServiceProvider.php
+public/Admin/

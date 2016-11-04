@@ -15,7 +15,7 @@ DingoRoute::group(['namespace' => 'System'], function($dgRoute) {
     $dgRoute->post('/admins', 'AdminController@store');
     $dgRoute->post('/login', 'AccountController@login');
 
-//    $dgRoute->group(['middleware' => 'jwt_check'], function () use ($dgRoute) {
+    $dgRoute->group(['middleware' => ['jwt_check', 'permission_check']], function () use ($dgRoute) {
 //    $dgRoute->group(['middleware' => 'api.auth'], function () use ($dgRoute) {
         $dgRoute->group(['prefix' => 'roles'], function () use ($dgRoute) {
             $dgRoute->get('/', 'RoleController@index');
@@ -25,13 +25,21 @@ DingoRoute::group(['namespace' => 'System'], function($dgRoute) {
             $dgRoute->delete('/{id}', 'RoleController@destroy');
         });
 
+    $dgRoute->group(['prefix' => 'permissions'], function () use ($dgRoute) {
+        $dgRoute->get('/', 'PermissionController@index');
+        $dgRoute->get('/{id}', 'PermissionController@show');
+        $dgRoute->post('/', 'PermissionController@store');
+        $dgRoute->match(['put', 'patch'], '/{id}', 'PermissionController@update');
+        $dgRoute->delete('/{id}', 'PermissionController@destroy');
+    });
+
         $dgRoute->group(['prefix' => 'admins'], function () use ($dgRoute) {
             $dgRoute->get('/', 'AdminController@index');
             $dgRoute->get('/{id}', 'AdminController@show');
             $dgRoute->match(['put', 'patch'], '/{id}', 'AdminController@update');
             $dgRoute->delete('/{id}', 'AdminController@destroy');
         });
-//    });
+    });
 });
 
 DingoRoute::group(['namespace' => 'User'], function($dgRoute) {

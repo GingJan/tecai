@@ -19,7 +19,7 @@ class AdminRepositoryEloquent extends CommonRepositoryEloquent implements AdminR
     protected $rules = [
         ValidatorInterface::RULE_CREATE => [
             'account' => ['required', 'unique:admins','max:31'],
-            'username' => ['required', 'unique:users', 'max:31'],
+            'username' => ['required', 'unique:admins', 'max:31'],
             'email' => ['required','unique:admins','max:31','email'],
         ],
         ValidatorInterface::RULE_UPDATE => [
@@ -52,7 +52,6 @@ class AdminRepositoryEloquent extends CommonRepositoryEloquent implements AdminR
         $formatTime = date("Y-m-d H:i:s", $_SERVER['REQUEST_TIME']);
         $attributes['last_login_at']  = $formatTime;
         $attributes['last_login_ip'] = $_SERVER['REMOTE_ADDR'];
-//        dd($attributes);
         return parent::create($attributes);
     }
 
