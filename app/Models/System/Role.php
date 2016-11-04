@@ -40,7 +40,7 @@ class Role extends EntrustRole implements Transformable
         static::observe(app(RoleObserver::class));
     }
 
-    public function getPermissions() {
+    public function permissions() {
         return $this->belongsToMany(Permission::class, 'permission_role', 'role_id', 'permission_id');
     }
 }
