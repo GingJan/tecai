@@ -50,8 +50,8 @@ class Permission extends EntrustPermission implements Transformable
     const TYPE_PROTECTED = 20;
     const TYPE_PUBLIC = 30;
 
-    const STATUS_OPEN = 0;
-    const STATUS_CLOSE = 1;
+    const STATUS_OPENING = 0;
+    const STATUS_CLOSING = 1;
 
     public function getRoles() {
         return $this->belongsToMany(Role::class, 'permission_role', 'permission_id', 'role_id');
