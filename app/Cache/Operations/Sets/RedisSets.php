@@ -3,29 +3,15 @@ namespace tecai\Cache\Operations\Sets;
 
 use Illuminate\Cache\RedisStore;
 use Predis\ClientInterface;
-use tecai\Cache\Operations\OperationInterface;
+use tecai\Cache\Operations\Operation;
 
-class RedisSets implements OperationInterface
+class RedisSets extends Operation implements SetsInterface
 {
-    /**
-     * @var RedisStore
-     */
-    protected $store;
-
-    /**
-     * @var ClientInterface
-     */
-    protected $redisConnection;
-
-    /**
-     * @var string
-     */
-    public $key = '';
-
     public function __construct(RedisStore $redisStore)
     {
+        parent::__construct();
         $this->store = $redisStore;
-        $this->redisConnection = $this->store->connection();
+        $this->connection = $this->store->connection();
     }
 
     /**
@@ -34,9 +20,30 @@ class RedisSets implements OperationInterface
      */
     public function setKey($key)
     {
-        $this->key = $key;
+        $this->key .= $key;
         return $this;
     }
+
+    /**
+     * @param string $values
+     * @return int
+     */
+    public function set($values)
+    {
+        return $this->add($values);
+    }
+
+    /**
+     * @param string $values
+     * @return array
+     */
+    public function get($values)
+    {
+        $all = $this->getAll();
+        dd($all);
+        return array_intersect($values, $all);
+    }
+
 
     /**
      * @param int|string $values
@@ -47,7 +54,7 @@ class RedisSets implements OperationInterface
     {
         $values = func_get_args();
 
-        return $this->redisConnection->sadd($this->key, (array) $values);
+        return $this->connection->sadd($this->key, (array) $values);
     }
 
     /**
@@ -55,7 +62,7 @@ class RedisSets implements OperationInterface
      */
     public function count()
     {
-        return $this->redisConnection->scard($this->key);
+        return $this->connection->scard($this->key);
     }
 
     /**
@@ -65,7 +72,7 @@ class RedisSets implements OperationInterface
      */
     public function diff($keys, $_ = null)
     {
-        return $this->redisConnection->sdiff(func_get_args());
+        return $this->connection->sdiff(func_get_args());
     }
 
     /**
@@ -77,7 +84,7 @@ class RedisSets implements OperationInterface
     public function diffTo($destKey, $keys, $_ = null)
     {
         $keys = array_shift(func_get_args());
-        return $this->redisConnection->sdiffstore($destKey, $keys);
+        return $this->connection->sdiffstore($destKey, $keys);
     }
 
     /**
@@ -89,7 +96,7 @@ class RedisSets implements OperationInterface
     {
         $keys = func_get_args();
         array_unshift($keys, $this->key);
-        return $this->redisConnection->sinter($keys);
+        return $this->connection->sinter($keys);
     }
 
     /**
@@ -102,7 +109,7 @@ class RedisSets implements OperationInterface
     {
         $keys = func_get_args();
         $keys[0] = $this->key;
-        return $this->redisConnection->sinterstore($destKey, $keys);
+        return $this->connection->sinterstore($destKey, $keys);
     }
 
     /**
@@ -111,7 +118,7 @@ class RedisSets implements OperationInterface
      */
     public function has($value)
     {
-        return $this->redisConnection->sismember($this->key, $value);
+        return $this->connection->sismember($this->key, $value);
     }
 
     /**
@@ -119,7 +126,7 @@ class RedisSets implements OperationInterface
      */
     public function getAll()
     {
-        return $this->redisConnection->smembers($this->key);
+        return $this->connection->smembers($this->key);
     }
 
     /**
@@ -129,7 +136,7 @@ class RedisSets implements OperationInterface
      */
     public function moveTo($destKey, $value)
     {
-        return $this->redisConnection->smove($this->key, $destKey, $value);
+        return $this->connection->smove($this->key, $destKey, $value);
     }
 
     /**
@@ -138,7 +145,7 @@ class RedisSets implements OperationInterface
      */
     public function popRandom($count = null)
     {
-        return $this->redisConnection->spop($this->key, $count);
+        return $this->connection->spop($this->key, $count);
     }
 
     /**
@@ -147,7 +154,7 @@ class RedisSets implements OperationInterface
      */
     public function getRandom($count = null)
     {
-        return $this->redisConnection->srandmember($this->key, $count);
+        return $this->connection->srandmember($this->key, $count);
     }
 
     /**
@@ -158,7 +165,7 @@ class RedisSets implements OperationInterface
     public function remove($values, $_ = null)
     {
         $values = is_array($values) ? $values : func_get_args();
-        return $this->redisConnection->srem($this->key, $values);
+        return $this->connection->srem($this->key, $values);
     }
 
     /**
@@ -168,7 +175,7 @@ class RedisSets implements OperationInterface
      */
     public function union($key, $_ = null)
     {
-        return $this->redisConnection->sunion(func_get_args());
+        return $this->connection->sunion(func_get_args());
     }
 
     /**
@@ -181,7 +188,7 @@ class RedisSets implements OperationInterface
     {
         $keys = func_get_args();
         $keys[0] = $this->key;
-        return $this->redisConnection->sunionstore($destKey, $keys);
+        return $this->connection->sunionstore($destKey, $keys);
     }
 
     /**
@@ -191,7 +198,7 @@ class RedisSets implements OperationInterface
      */
     public function iterate($cursor, array $options = null)
     {
-        return $this->redisConnection->sscan($this->key, $cursor, $options);
+        return $this->connection->sscan($this->key, $cursor, $options);
     }
 
 
