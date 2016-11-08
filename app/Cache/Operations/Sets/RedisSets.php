@@ -2,10 +2,10 @@
 namespace tecai\Cache\Operations\Sets;
 
 use Illuminate\Cache\RedisStore;
-use Illuminate\Contracts\Cache\Repository as IlluminateCacheRepository;
 use Predis\ClientInterface;
+use tecai\Cache\Operations\OperationInterface;
 
-class RedisSets implements SetsInterface
+class RedisSets implements OperationInterface
 {
     /**
      * @var RedisStore
