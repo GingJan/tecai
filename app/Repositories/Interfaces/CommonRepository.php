@@ -13,13 +13,6 @@ interface CommonRepository {
     public function findOneByField($field, $value = null, $columns = ['*']);
 
     /**
-     * 根据查询条件显示记录集
-     * @param null $where
-     * @return mixed
-     */
-    public function listByLimit($where = null);
-
-    /**
      * 根据字段删除一条记录
      * @param string $field
      * @param string $value
