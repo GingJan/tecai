@@ -17,9 +17,9 @@ abstract class Operation implements OperationInterface
     protected $connection;
 
     /**
-     * @var string
+     * @var array|string
      */
-    public $key = '';
+    public $key;
 
     public function __construct()
     {
