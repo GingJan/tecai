@@ -10,7 +10,7 @@ interface OperationInterface
     public function setKey($key);
 
     /**
-     * @param string $values
+     * @param mixed $values
      * @return mixed
      */
     public function set($values);
