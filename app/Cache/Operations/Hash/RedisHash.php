@@ -19,7 +19,7 @@ class RedisHash extends Operation
      */
     public function setKey($key)
     {
-        $this->key .= $key;
+        $this->key = $this->prefix . $key;
         return $this;
     }
 
@@ -47,11 +47,11 @@ class RedisHash extends Operation
         if (!empty($field))
             return $this->connection->hget($this->key, $field);//返回一个指定field的值
         else
-            return $this->getAll();//返回全部field的值
+            return $this->dump();//返回全部field=>$value的键值对
     }
 
     /**
-     * 返回全部field的值
+     * 返回所有字段的值
      * @return array
      */
     public function getAll()
@@ -119,7 +119,7 @@ class RedisHash extends Operation
     }
 
     /**
-     * 获取全部的字段和值
+     * 获取全部的字段=>值的键值对
      * @return array
      */
     public function dump()
