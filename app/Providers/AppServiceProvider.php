@@ -67,7 +67,20 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(CriteriaInterface::class, config('repository.criteria.baseCriteria', BaseCriteria::class));
         $this->app->register(RepositoryServiceProvider::class);//项目内自定义的SP
+        $this->app->register(CacheOperationServiceProvider::class);
+        $this->registerResource();
 
+        //第三方包的SP，也可以在config/app下配置，但如果在config/app.php里配置，无论什么环境下都会载入该SP，虽然APP_DEBUG=false可以保证不会在正式环境上执行，但是依然会影响Laravel的启动速度和时间，也浪费内存，因为毕竟该SP会载入
+//        if ( 'production' !== $this->app->environment() ) {//当为生产环境时才注册该服务提供者
+//            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+//        }
+//        if ( 'local' === $this->app->environment() ) {//只在本机（开发环境）下才注册
+//            $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
+//        }
+    }
+
+    protected function registerResource()
+    {
         //Common
         $this->app->alias(Tag::class, 'tags');
 
@@ -84,13 +97,5 @@ class AppServiceProvider extends ServiceProvider
         $this->app->alias(Industry::class, 'industries');
         $this->app->alias(Job::class, 'jobs');
         $this->app->alias(User::class, 'users');
-
-        //第三方包的SP，也可以在config/app下配置，但如果在config/app.php里配置，无论什么环境下都会载入该SP，虽然APP_DEBUG=false可以保证不会在正式环境上执行，但是依然会影响Laravel的启动速度和时间，也浪费内存，因为毕竟该SP会载入
-//        if ( 'production' !== $this->app->environment() ) {//当为生产环境时才注册该服务提供者
-//            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
-//        }
-//        if ( 'local' === $this->app->environment() ) {//只在本机（开发环境）下才注册
-//            $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
-//        }
     }
 }
