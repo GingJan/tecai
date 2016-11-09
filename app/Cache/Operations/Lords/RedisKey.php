@@ -15,10 +15,16 @@ class RedisKey extends Operation
 
     public function setKey($keys)
     {
-        $prefix = $this->key;
-        foreach ((array) $keys as $key) {
-            $this->key[] = $prefix . $key;
+        if (is_array($keys)) {
+            $prefix = $this->key;
+            $this->key = [];
+            foreach ((array) $keys as $key) {
+                $this->key[] = $prefix . $key;
+            }
+        } else {
+            parent::setKey($keys);
         }
+
 
         return $this;
     }
@@ -82,7 +88,7 @@ class RedisKey extends Operation
     /**
      * @return bool
      */
-    public function persistent()
+    public function forever()
     {
         return (bool) $this->connection->persist($this->key);
     }
@@ -91,7 +97,7 @@ class RedisKey extends Operation
      * @param int $seconds
      * @return bool
      */
-    public function expireAsMilli($seconds)
+    public function expireInMilli($seconds)
     {
         return (bool) $this->connection->pexpire($this->key, $seconds);
     }
@@ -103,7 +109,7 @@ class RedisKey extends Operation
     public function expireAtMilli($timestamp)
     {
         $timestamp = is_numeric($timestamp) ? $timestamp : strtotime($timestamp);
-        return (bool) $this->connection->expireat($this->key, $timestamp);
+        return (bool) $this->connection->pexpireat($this->key, $timestamp);
     }
 
     /**
@@ -166,9 +172,9 @@ class RedisKey extends Operation
      * @param $destKey
      * @return array
      */
-    public function sort($isChar = false, $offset, $take, $orderBy, $sortedBy, $destKey)
+    public function sort($isChar = false, $offset = null, $take = null, $orderBy = null, $sortedBy = null, $destKey = null)
     {
-        return $this->connection->sort($this->key);
+        return $this->connection->sort($this->key, ['limit' => [$offset, $take]]);
     }
 
     /**
