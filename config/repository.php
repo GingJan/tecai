@@ -239,5 +239,18 @@ return [
             'provider'     => 'RepositoryServiceProvider',
             'criteria'     => 'Criteria',
         ]
-    ]
+    ],
+
+    'resourceForeign' => [
+        'tag' => 'tag_id',
+        'admin' => 'admin_id',
+        'client' => 'client_id',
+        'user' => 'user_id',
+        'corporation' => 'corporation_id',
+        'job' => 'job_id',
+        'industry' => 'industry_id',
+        'permission' => 'permission_id',
+        'role' => 'role_id',
+    ],
+
 ];

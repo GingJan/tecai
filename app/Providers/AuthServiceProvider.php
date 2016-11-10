@@ -30,7 +30,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies($gate);
 
         //注册权限检查策略
-        $gate->before(function ($user, $uri, $method) {
+        $gate->before(function ($user, $uri, $method, $id) {
             $roles = $user->roles;
 
             $resource = explode('/', trim($uri, '/'))[0];
@@ -44,8 +44,15 @@ class AuthServiceProvider extends ServiceProvider
 
                     if ($perm->uri == $uri && $perm->verb == $method) {
                         if ($perm::TYPE_PRIVATE == $perm->type) {
-                            return app($resource)->find(1, ['owner_id'])->owner_id == $user->id;
+                            $ownerField = config('auth.ownerField');
+                            if (count($id) > 1) {
+                                list($pResource, $pid) = $id;
+                                return app($resource)->where($pResource . '_id', '=', $pid)->first([$ownerField])->$ownerField == $user->getAuthIdentifier();
+                            } else {
+                                return app($resource)->find($id[0], [$ownerField])->$ownerField == $user->getAuthIdentifier();
+                            }
                         }
+
                         return true;
                     }
                 }

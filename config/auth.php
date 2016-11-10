@@ -64,4 +64,6 @@ return [
         'expire' => 60,
     ],
 
+    'ownerField' => 'owner_id',
+
 ];
