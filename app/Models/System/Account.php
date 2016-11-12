@@ -37,6 +37,12 @@ class Account extends Model implements AuthenticatableContract, AuthorizableCont
     const TYPE_ADMIN = 10;
     const TYPE_ORGANIZATION = 20;
     const TYPE_USER = 30;
+
+    const STATUS_CHECKING = 10;
+    const STATUS_NORMAL = 20;
+    const STATUS_REJECTED = 30;
+    const STATUS_BANNED = 40;
+
     protected $table = 'accounts';
 
     //白名单（服务于create批量插入，允许的字段），fillable与guarded不可同时使用
