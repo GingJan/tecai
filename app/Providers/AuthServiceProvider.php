@@ -40,9 +40,9 @@ class AuthServiceProvider extends ServiceProvider
                 foreach ($permissions as $perm) {
                     if ($perm::TYPE_PUBLIC == $perm->type) return true;
 
-                    if ($perm::STATUS_CLOSING == $perm->status) return false;
-
                     if ($perm->uri == $uri && $perm->verb == $method) {
+                        if ($perm::STATUS_CLOSING == $perm->status) return false;
+
                         if ($perm::TYPE_PRIVATE == $perm->type) {
                             $ownerField = config('auth.ownerField');
                             if (count($id) > 1) {
