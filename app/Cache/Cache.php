@@ -1,6 +1,7 @@
 <?php
 namespace tecai\Cache;
 
+use Illuminate\Contracts\Cache\Repository;
 use tecai\Cache\Operations\OperationInterface;
 
 class Cache
@@ -10,9 +11,15 @@ class Cache
      */
     protected static $structures = [];
 
+    /**
+     * @var Repository
+     */
+    protected $cacheRepository;
+
     public function __construct()
     {
         $structures = config('cache.structures', '');
+        $this->cacheRepository = app(Repository::class);
         if (!empty($structures)) {
 
             foreach ($structures as $structure => $concrete) {
@@ -22,6 +29,11 @@ class Cache
                 }
             }
         }
+    }
+
+    public function getCacheRepository()
+    {
+        return $this->cacheRepository;
     }
 
     public function __call($method, $params)
