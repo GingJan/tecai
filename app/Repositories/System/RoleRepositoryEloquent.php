@@ -3,12 +3,10 @@
 namespace tecai\Repositories\System;
 
 use Prettus\Repository\Contracts\CriteriaInterface;
-use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use tecai\Repositories\CommonRepositoryEloquent;
 use tecai\Repositories\Interfaces\System\RoleRepository;
 use tecai\Models\System\Role;
-use tecai\Validators\RoleValidator;
 
 /**
  * Class RoleRepositoryEloquent
@@ -27,12 +25,13 @@ class RoleRepositoryEloquent extends CommonRepositoryEloquent implements RoleRep
             'name' => ['required', 'unique:roles,name','max:31'],
             'display_name' => ['sometimes','max:63'],
             'description' => ['sometimes','max:255'],
+            'permission_id' => ['sometimes', 'numeric'],
         ],
         ValidatorInterface::RULE_UPDATE => [
-//            'name' => 'required|unique:roles,name',
             'name' => ['required','unique:roles,name', 'max:31'],
             'display_name' => ['sometimes', 'max:63'],
             'description' => ['sometimes', 'max:255'],
+            'permission_id' => ['sometimes', 'numeric'],
         ],
     ];
 
