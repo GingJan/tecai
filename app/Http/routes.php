@@ -15,7 +15,7 @@ DingoRoute::group(['namespace' => 'System'], function($dgRoute) {
     $dgRoute->post('/admins', 'AdminController@store');
     $dgRoute->post('/login', 'AccountController@login');
 
-    $dgRoute->group(['middleware' => ['jwt_check', 'permission_check']], function () use ($dgRoute) {
+//    $dgRoute->group(['middleware' => ['jwt_check', 'permission_check']], function () use ($dgRoute) {
 //    $dgRoute->group(['middleware' => 'api.auth'], function () use ($dgRoute) {
         $dgRoute->group(['prefix' => 'roles'], function () use ($dgRoute) {
             $dgRoute->get('/', 'RoleController@index');
@@ -39,7 +39,7 @@ DingoRoute::group(['namespace' => 'System'], function($dgRoute) {
             $dgRoute->match(['put', 'patch'], '/{id}', 'AdminController@update');
             $dgRoute->delete('/{id}', 'AdminController@destroy');
         });
-    });
+//    });
 });
 
 DingoRoute::group(['namespace' => 'User'], function($dgRoute) {
@@ -88,5 +88,12 @@ DingoRoute::group(['namespace' => 'Organization'], function($dgRoute) {
         $dgRoute->post('/', 'CorporationController@store');
         $dgRoute->match(['put', 'patch'], '/{id}', 'CorporationController@update');
         $dgRoute->delete('/{id}', 'CorporationController@destroy');
+    });
+
+    $dgRoute->group(['prefix' => 'clients'], function () use ($dgRoute) {
+        $dgRoute->get('/', 'ClientController@index');
+        $dgRoute->get('/{account}', 'ClientController@show');
+        $dgRoute->match(['put', 'patch'], '/{account}', 'ClientController@update');
+        $dgRoute->delete('/{account}', 'ClientController@destroy');
     });
 });
