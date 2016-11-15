@@ -52,7 +52,9 @@ class RedisSets extends Operation implements SetsInterface
      */
     public function add($values, $_ = null)
     {
-        $values = func_get_args();
+        if (!is_array($values)) {
+            $values = func_get_args();
+        }
 
         return $this->connection->sadd($this->key, (array) $values);
     }
