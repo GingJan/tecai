@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use tecai\Cache\Facades\Cache;
 use tecai\Http\Requests;
 use tecai\Http\Controllers\Controller;
 use tecai\Model\System\Admin;
@@ -53,6 +54,20 @@ class AccountController extends Controller
             if(password_verify($credentials['password'], $model->password)) {
                 //取出数据，存入redis/memcached
                 $model->token = JWTAuth::fromUser($model, $model->toArray());//该token中包含了staff的一些信息
+                $roles = array_map(function($role) {
+                    $role->getKey();
+                }, $model->roles->all());
+
+                $allPermissions = [];
+                foreach ($roles as $role) {
+                    $allPermissions = array_merge($allPermissions, $role->permissions->all());
+                }
+
+                $allPermissions = array_map(function ($permission) {
+                    return $permission->getKey();
+                }, $allPermissions);
+
+                Cache::sets('accounts:' . $model->getKey())->add($allPermissions);//使用字符串就好了？
                 return $model;
             }
             $this->response->errorUnauthorized('invalid_credentials');
