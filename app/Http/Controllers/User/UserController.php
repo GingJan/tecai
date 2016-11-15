@@ -38,12 +38,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        try {
-            $res = $this->repository->listByLimit($request->getQueryString());
-            return $res;
-        } catch(\Exception $e) {
-            $this->response->errorNotFound($e->getMessage());
-        }
+        return $this->response()->paginator($this->repository->paginate(), new CommonTransformer());
     }
 
     /**
@@ -56,6 +51,9 @@ class UserController extends Controller
         $model = DB::transaction( function($db) use($request, $accountRepository) {
                     $attrs = $request->only('account', 'password');
                     $attrs['type'] = Account::TYPE_USER;
+                    if (is_numeric($attrs['account'])) {
+                        $this->response()->errorBadRequest('account 不可为全数字');
+                    }
                     $accountRepository->create($attrs);//创建账户
                     $model = $this->repository->create($request->all());//创建用户信息
                     return $model;
@@ -71,60 +69,28 @@ class UserController extends Controller
      */
     public function show($account)
     {
-        return $this->response()->item($this->repository->findOneByField('account',$account), new CommonTransformer());
+        return $this->response()->item($this->findModel($account, false, 'account'), new CommonTransformer());
     }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-
-    }
-
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  UserUpdateRequest $request
-     * @param  string            $id
-     *
-     * @return Response
+     * @param Request $request
+     * @param $id
+     * @return \Dingo\Api\Http\Response
      */
     public function update(Request $request, $id)
     {
-        try {
-            $model = $this->repository->findOneByField('account',$id);
-            return $this->repository->update($request->all(), $model->id);
-        } catch (ValidatorException $e) {
-            throw new BadRequestHttpException($e->getMessageBag());
-//            $this->response->errorBadRequest($e->getMessageBag());
-        } catch (NotFoundHttpException $e) {
-            throw $e;
-//            $this->response->errorNotFound($e->getMessage());
-        }
+        $this->repository->update($request->all(), $id);
+        return $this->response()->noContent();
     }
 
-
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param $account
+     * @return \Dingo\Api\Http\Response
      */
     public function destroy($account)
     {
-        try {
-            $this->repository->deleteByField('account', $account);
-            return $this->response()->noContent();
-        } catch (NotFoundHttpException $e) {
-            return $this->response()->noContent();
-        }
+        $this->findModel($account, false, 'account')->delete();
+        return $this->response()->noContent();
     }
 }

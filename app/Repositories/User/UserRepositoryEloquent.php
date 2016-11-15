@@ -35,7 +35,7 @@ class UserRepositoryEloquent extends CommonRepositoryEloquent implements UserRep
             'last_login_ip' => ['sometimes','ip']
         ],
         ValidatorInterface::RULE_UPDATE => [
-            'username' => ['required', 'max:31', 'unique:users'],
+            'username' => ['required', 'max:31', 'unique:users,username'],
             'email' => ['sometimes', 'email', 'max:31', 'unique:users'],
             'phone' => ['sometimes', 'regex:/^1[3|5|8]{1}[0-9]{1}[0-9]{8}$/', 'max:11', 'unique:users'],
             'age' => ['sometimes', 'numeric', 'min:0'],
@@ -66,6 +66,12 @@ class UserRepositoryEloquent extends CommonRepositoryEloquent implements UserRep
         'city',
         'wants_job_id',
         'wants_job_name',
+    ];
+
+    protected $fieldUnchangeable = [
+        'account',
+        'id',
+        'created_at',
     ];
 
     /**
@@ -99,11 +105,6 @@ class UserRepositoryEloquent extends CommonRepositoryEloquent implements UserRep
     }
 
     public function update(array $attributes, $id) {
-        $formatTime = date("Y-m-d H:i:s", $_SERVER['REQUEST_TIME']);
-        $this->rules[ValidatorInterface::RULE_UPDATE]['username'][2] = 'unique:users,username,'.$id;//如果要account作为except的话,unique:users,username,$account,account
-        $this->rules[ValidatorInterface::RULE_UPDATE]['email'][3] = 'unique:users,email,'.$id;
-        $this->rules[ValidatorInterface::RULE_UPDATE]['phone'][3] = 'unique:users,phone,'.$id;
-        $attributes['updated_at'] = $formatTime;
         return parent::update($attributes, $id);
     }
 }
