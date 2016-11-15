@@ -58,17 +58,17 @@ trait CacheableRepository
         }
     }
 
-    abstract public function setCache($cacheTimes, $data = null);
+    protected function setCache($cacheTimes, $data = null) {}
 
-    abstract public function allFromCache($columns = null);
+    protected function allFromCache($columns = null) {}
 
-    abstract public function paginateFromCache($columns = null);
+    protected function paginateFromCache($limit = null, $columns = null) {}
 //
-    abstract public function findFromCache($id, $columns = null);
+    protected function findFromCache($id, $columns = null) {}
 //
-//    abstract public function findByFieldFromCache($columns = null);
+//    protected function findByFieldFromCache($field, $columns = null) {}
 //
-//    abstract public function findWhereFromCache($columns = null);
+//    protected function findWhereFromCache($where, $columns = null) {}
 
     public function getByCriteriaFromCache($columns = null){}
 
