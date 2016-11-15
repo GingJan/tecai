@@ -7,14 +7,14 @@ use Illuminate\Http\Request;
 use tecai\Http\Requests;
 use tecai\Http\Controllers\Controller;
 use tecai\Repositories\Interfaces\User\IndustryRepository;
-use tecai\Transformers\IndustryTransformer;
+use tecai\Transformers\CommonTransformer;
 
 class IndustryController extends Controller
 {
     /**
      * @var IndustryRepository
      */
-    private $repository;
+    protected $repository;
 
     /**
      * @param IndustryRepository $industryRepository
@@ -31,7 +31,7 @@ class IndustryController extends Controller
      */
     public function index()
     {
-        return $this->response()->paginator($this->repository->paginate(), new IndustryTransformer());
+        return $this->response()->paginator($this->repository->paginate(), new CommonTransformer());
     }
 
     /**
@@ -43,7 +43,7 @@ class IndustryController extends Controller
     public function store(Request $request)
     {
         $model = $this->repository->create($request->all());
-        return $this->created($model->id);
+        return $this->response()->created(generateResourceURI() . '/' .$model->id);
     }
 
     /**
@@ -54,7 +54,7 @@ class IndustryController extends Controller
      */
     public function show($id)
     {
-        return $this->response()->item($this->repository->find($id), new IndustryTransformer());
+        return $this->response()->item($this->repository->find($id), new CommonTransformer());
     }
 
     /**

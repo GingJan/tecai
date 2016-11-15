@@ -7,14 +7,14 @@ use Illuminate\Http\Request;
 use tecai\Http\Requests;
 use tecai\Http\Controllers\Controller;
 use tecai\Repositories\Interfaces\Common\TagRepository;
-use tecai\Transformers\TagTransformer;
+use tecai\Transformers\CommonTransformer;
 
 class TagController extends Controller
 {
     /**
      * @var TagRepository
      */
-    private $repository;
+    protected $repository;
 
     /**
      * @param TagRepository $tagRepository
@@ -31,7 +31,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        return $this->response()->paginator($this->repository->paginate(), new TagTransformer());
+        return $this->response()->paginator($this->repository->paginate(), new CommonTransformer());
     }
 
     /**
@@ -54,18 +54,12 @@ class TagController extends Controller
      */
     public function show($id)
     {
-        return $this->response()->item($this->repository->find($id), new TagTransformer());
+        return $this->response()->item($this->repository->find($id), new CommonTransformer());
     }
 
     /**
      * 标签资源不提供更新接口
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-//    public function update(Request $request, $id) {}
 
     /**
      * Remove the specified resource from storage.
