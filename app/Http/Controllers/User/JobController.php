@@ -16,7 +16,7 @@ class JobController extends Controller {
     /**
      * @var JobRepository
      */
-    private $repository;
+    protected $repository;
 
     /**
      * @param JobRepository $jobRepository
@@ -27,11 +27,10 @@ class JobController extends Controller {
     }
 
     /**
-     * @param Request $request
      * @return \Dingo\Api\Http\Response
      * TODO HATEOAS
      */
-    public function index(Request $request) {
+    public function index() {
         //添加meta元数据的是laravel的paginate
         return $this->response()->paginator($this->repository->paginate(), new JobTransformer());
     }
@@ -41,18 +40,12 @@ class JobController extends Controller {
         return $this->response()->item($this->repository->find($id), new JobTransformer());
     }
 
-    /**
-     * @param Request $request
-     */
     public function store(Request $request)
     {
         $model = $this->repository->create($request->all());
         return $this->response()->created(generateResourceURI() . '/' . $model->id);
     }
 
-    /**
-     * @param Request $request
-     */
     public function update(Request $request, $id)
     {
         $this->repository->update($request->all(), $id);

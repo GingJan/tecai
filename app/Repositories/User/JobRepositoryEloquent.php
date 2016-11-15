@@ -82,8 +82,6 @@ class JobRepositoryEloquent extends CommonRepositoryEloquent implements JobRepos
         'id',
         'job_seq',
         'created_at',
-        'status',
-        'click'
     ];
 
     /**
@@ -108,6 +106,8 @@ class JobRepositoryEloquent extends CommonRepositoryEloquent implements JobRepos
     public function create(array $job) {
         $job['job_seq'] = uniqid();
         $job['click'] = 0;
+        $this->validator->with($job)->passesOrFail(ValidatorInterface::RULE_CREATE);
+        $job['type'] = in_array($job['type'], [Job::TYPE_PRACTICE, Job::TYPE_CAMPUS, Job::TYPE_SOCIAL])? $job['type'] : Job::TYPE_SOCIAL;
         $from_time = strtotime($job['from_time']);
         $to_time = strtotime($job['to_time']);
         $now_time = time();
@@ -119,8 +119,7 @@ class JobRepositoryEloquent extends CommonRepositoryEloquent implements JobRepos
     }
 
     public function update(array $job, $id) {
-        $job = array_unallow($this->getFieldUnchangeable(), $job);
-
+        $this->validator->with($job)->passesOrFail(ValidatorInterface::RULE_UPDATE);
         $from_time = strtotime($job['from_time']);
         $to_time = strtotime($job['to_time']);
         $now_time = time();
