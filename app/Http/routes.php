@@ -48,9 +48,9 @@ DingoRoute::group(['namespace' => 'User'], function($dgRoute) {
     $dgRoute->group(['middleware' => 'jwt_check'], function () use ($dgRoute) {
         $dgRoute->group(['prefix' => 'users'], function () use ($dgRoute) {
             $dgRoute->get('/', 'UserController@index');
-            $dgRoute->get('/{account}', 'UserController@show');
-            $dgRoute->match(['put', 'patch'], '/{account}', 'UserController@update');
-            $dgRoute->delete('/{account}', 'UserController@destroy');
+            $dgRoute->get('/{id}', 'UserController@show');
+            $dgRoute->match(['put', 'patch'], '/{id}', 'UserController@update');
+            $dgRoute->delete('/{id}', 'UserController@destroy');
         });
     });
 
