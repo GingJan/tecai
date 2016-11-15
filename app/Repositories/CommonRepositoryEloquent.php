@@ -6,7 +6,7 @@ use Prettus\Repository\Eloquent\BaseRepository;
 use tecai\Repositories\Interfaces\CommonRepository;
 
 abstract class CommonRepositoryEloquent extends BaseRepository implements CommonRepository {//这个抽象类其实没必要的，下面的方法是可以放入BaseRepository里
-    use CacheableRepository;
+//    use CacheableRepository;
     /**
      * 不可更新字段
      * @var array
@@ -38,6 +38,11 @@ abstract class CommonRepositoryEloquent extends BaseRepository implements Common
 
     public function deleteByField($field, $value) {
         return $this->deleteWhere([$field => $value]);
+    }
+
+    public function update(array $attr, $id)
+    {
+        return parent::update(array_unallow($this->getFieldUnchangeable(), $attr), $id);
     }
 
 }
