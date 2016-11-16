@@ -35,8 +35,18 @@ class AccountObserver
      */
     public function created($account)
     {
-        $role = app(RoleRepository::class)->findOneByField('name', 'normal-user');
-        $account->attachRole($role);
+        switch($account->type) {
+            case Account::TYPE_ADMIN :
+                $role = app(RoleRepository::class)->findOneByField('name', 'admin');
+                $account->attachRole($role);
+                break;
+            case Account::TYPE_ORGANIZATION :
+                $role = app(RoleRepository::class)->findOneByField('name', 'client');
+                $account->attachRole($role);
+                break;
+            default :
+                break;
+        }
     }
 
     /**
