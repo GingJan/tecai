@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('account',31)->unique();
             $table->string('username',31)->unique();//用户名/昵称
+            $table->string('realname',7);//用户真实姓名
             $table->string('email',31)->unique()->default('');//->nullable() or ''
             $table->string('phone',11)->index()->default('');//在数据表是index，但是在模型检验时是唯一的
             $table->unsignedTinyInteger('age')->default(0);
@@ -33,6 +34,7 @@ class CreateUsersTable extends Migration
             $table->string('address',31)->default('');//目前住址
             $table->unsignedSmallInteger('wants_job_id')->default(0);//求职意向
             $table->string('wants_job_name',31)->default('');//求职意向名
+            $table->string('attachment', 63);//附件
             $table->string('last_login_at', 19)->default('');
             $table->char('last_login_ip',15)->default('');
             $table->timestamps();
