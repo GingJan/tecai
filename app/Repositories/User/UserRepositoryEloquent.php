@@ -62,6 +62,7 @@ class UserRepositoryEloquent extends CommonRepositoryEloquent implements UserRep
         'school_level',
         'school',
         'college',
+        'major',
         'province',
         'city',
         'wants_job_id',

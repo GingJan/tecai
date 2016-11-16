@@ -22,6 +22,7 @@ native | 籍贯 | N | string |
 province | 所在省份 | N | string |
 city | 所在城市 | N | string |
 address | 详细地址 | N | string |
+wants_job_id | 意向工作id | N | int |
 wants_job_name | 意向工作 | N | string |
 page | 当前页码 | N | int | 默认1
 sorted_by | 根据哪个字段排序 | N | string | 如：sorted_by=created_at。默认根据id字段排序
