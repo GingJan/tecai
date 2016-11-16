@@ -3,6 +3,7 @@ namespace tecai\Repositories;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Prettus\Repository\Eloquent\BaseRepository;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use tecai\Repositories\Interfaces\CommonRepository;
 
 abstract class CommonRepositoryEloquent extends BaseRepository implements CommonRepository {//这个抽象类其实没必要的，下面的方法是可以放入BaseRepository里
@@ -43,6 +44,13 @@ abstract class CommonRepositoryEloquent extends BaseRepository implements Common
     public function update(array $attr, $id)
     {
         return parent::update(array_unallow($this->getFieldUnchangeable(), $attr), $id);
+    }
+
+    protected function isIn($needle, array $enum)
+    {
+        if(!in_array($needle, $enum)) {
+            throw new BadRequestHttpException();
+        }
     }
 
 }

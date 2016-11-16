@@ -59,12 +59,12 @@ class $CLASS$RepositoryEloquent extends CommonRepositoryEloquent implements $CLA
     public function create(array $attr) {
         //Code goes here
 
-        parent::create($attr);
+        return parent::create($attr);
     }
 
     public function update(array $attr, $id) {
         //Code goes here
 
-        parent::update($attr, $id);
+        return parent::update($attr, $id);
     }
 }
