@@ -78,6 +78,14 @@ DingoRoute::group(['namespace' => 'User'], function($dgRoute) {
         $dgRoute->delete('/{id}', 'SchoolController@destroy');
     });
 
+    $dgRoute->group(['prefix' => 'resumes'], function () use ($dgRoute) {
+        $dgRoute->get('/', 'ResumeController@index');
+        $dgRoute->get('/{id}', 'ResumeController@show');
+        $dgRoute->post('/', 'ResumeController@store');
+        $dgRoute->match(['put', 'patch'], '/{id}', 'ResumeController@update');
+        $dgRoute->delete('/{id}', 'ResumeController@destroy');
+    });
+
 });
 
 DingoRoute::group(['namespace' => 'Common'], function($dgRoute) {
