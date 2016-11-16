@@ -70,6 +70,14 @@ DingoRoute::group(['namespace' => 'User'], function($dgRoute) {
         $dgRoute->delete('/{id}', 'IndustryController@destroy');
     });
 
+    $dgRoute->group(['prefix' => 'schools'], function () use ($dgRoute) {
+        $dgRoute->get('/', 'SchoolController@index');
+        $dgRoute->get('/{id}', 'SchoolController@show');
+        $dgRoute->post('/', 'SchoolController@store');
+        $dgRoute->match(['put', 'patch'], '/{id}', 'SchoolController@update');
+        $dgRoute->delete('/{id}', 'SchoolController@destroy');
+    });
+
 });
 
 DingoRoute::group(['namespace' => 'Common'], function($dgRoute) {
