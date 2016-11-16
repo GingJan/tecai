@@ -19,6 +19,7 @@ class UserRepositoryEloquent extends CommonRepositoryEloquent implements UserRep
         ValidatorInterface::RULE_CREATE => [
             'account' => ['required', 'unique:admins','max:31'],
             'username' => ['required', 'unique:users', 'max:31'],
+            'realname' => ['required', 'max:7'],
             'email' => ['required', 'email', 'max:31','unique:users'],
             'phone' => ['sometimes', 'regex:/^1[3|5|8]{1}[0-9]{1}[0-9]{8}$/', 'max:11', 'unique:users'],//这样验证为unique，但是数据表的索引是index
             'age' => ['sometimes', 'numeric', 'min:0'],
@@ -30,12 +31,14 @@ class UserRepositoryEloquent extends CommonRepositoryEloquent implements UserRep
             'province' => ['sometimes', 'max:5'],
             'city' => ['sometimes', 'max:7'],
             'address' => ['sometimes', 'max:31'],
+            'attachment' => ['sometimes', 'max:63'],
             'wants_job_name' => ['sometimes', 'max:31'],
             'last_login_at' => ['sometimes','date_format:Y-m-d H:i:s'],
             'last_login_ip' => ['sometimes','ip']
         ],
         ValidatorInterface::RULE_UPDATE => [
             'username' => ['required', 'max:31', 'unique:users,username'],
+            'realname' => ['required', 'max:7'],
             'email' => ['sometimes', 'email', 'max:31', 'unique:users'],
             'phone' => ['sometimes', 'regex:/^1[3|5|8]{1}[0-9]{1}[0-9]{8}$/', 'max:11', 'unique:users'],
             'age' => ['sometimes', 'numeric', 'min:0'],
@@ -47,6 +50,7 @@ class UserRepositoryEloquent extends CommonRepositoryEloquent implements UserRep
             'province' => ['sometimes', 'max:5'],
             'city' => ['sometimes', 'max:7'],
             'address' => ['sometimes', 'max:31'],
+            'attachment' => ['sometimes', 'max:63'],
             'wants_job_name' => ['sometimes', 'max:31'],
             'last_login_at' => ['sometimes','date_format:Y-m-d H:i:s'],
             'last_login_ip' => ['sometimes','ip']
