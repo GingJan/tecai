@@ -52,3 +52,13 @@ if(! function_exists('array_rand_element')) {
     }
 
 }
+
+if(! function_exists('is_md5_same')) {
+    function is_md5_same($one, $two) {
+        if (!is_string($one, $two)) {
+            $one = json_encode($one);
+            $two = json_encode($two);
+        }
+        return md5($one) === md5($two);
+    }
+}
