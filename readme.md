@@ -1,6 +1,6 @@
 # This is a platform like Lagou
 
-## introduction
+## Introduction
 This is a platform that provide jobs and talent searching 
 
 following list is what we are using in the project 
@@ -16,5 +16,4 @@ Laravel is accessible, yet powerful, providing powerful tools needed for large, 
 - Vue-route
 
 ### License
-
 this project is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
