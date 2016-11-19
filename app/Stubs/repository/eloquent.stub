@@ -1,0 +1,70 @@
+<?php
+
+$NAMESPACE$
+
+use Prettus\Repository\Contracts\CriteriaInterface;
+use Prettus\Validator\Contracts\ValidatorInterface;
+use $REPOSITORY$
+use $MODEL$;
+use tecai\Repositories\CommonRepositoryEloquent;
+//$USE_VALIDATOR$
+
+/**
+ * Class $CLASS$RepositoryEloquent
+ * @package $NAMESPACE$
+ */
+class $CLASS$RepositoryEloquent extends CommonRepositoryEloquent implements $CLASS$Repository
+{
+    protected $rules = [
+        ValidatorInterface::RULE_CREATE => [
+            //validation rule
+        ],
+        ValidatorInterface::RULE_UPDATE => [
+            //validation rule
+        ],
+    ];
+
+    /**
+     * 可作为查询条件字段
+     * @var array
+     */
+    protected $fieldSearchable = [];
+
+    /**
+     * 不可更新字段
+     * @var array
+     */
+    protected $fieldUnchangeable = [];
+
+    /**
+     * Specify Model class name
+     *
+     * @return string
+     */
+    public function model()
+    {
+        return $CLASS$::class;
+    }
+
+    $VALIDATOR$
+
+    /**
+     * Boot up the repository, pushing criteria
+     */
+    public function boot()
+    {
+        $this->pushCriteria(app(CriteriaInterface::class));
+    }
+
+    public function create(array $attr) {
+        //Code goes here
+
+        return parent::create($attr);
+    }
+
+    public function update(array $attr, $id) {
+        //Code goes here
+
+        return parent::update($attr, $id);
+    }
+}

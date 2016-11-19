@@ -152,6 +152,7 @@ return [
     |
     */
     'criteria'   => [
+        'baseCriteria' => \tecai\Criteria\BaseCriteria::class,
         /*
         |--------------------------------------------------------------------------
         | Accepted Conditions
@@ -210,6 +211,11 @@ return [
             'orderBy'      => 'orderBy',
             'sortedBy'     => 'sortedBy',
             'with'         => 'with'
+        ],
+
+        'defaultField' => [
+            'orderBy'   =>  'id',
+            'sortedBy'  =>  'DESC',
         ]
     ],
     /*
@@ -221,6 +227,7 @@ return [
     'generator'  => [
         'basePath'      => app_path(),
         'rootNamespace' => 'tecai\\',
+        'stubsOverridePath' => app_path(),
         'paths'         => [
             'models'       => 'Models',
             'repositories' => 'Repositories',
@@ -231,7 +238,19 @@ return [
             'controllers'  => 'Http/Controllers',
             'provider'     => 'RepositoryServiceProvider',
             'criteria'     => 'Criteria',
-            'stubsOverridePath' => app_path()
         ]
-    ]
+    ],
+
+    'resourceForeign' => [
+        'tag' => 'tag_id',
+        'admin' => 'admin_id',
+        'client' => 'client_id',
+        'user' => 'user_id',
+        'corporation' => 'corporation_id',
+        'job' => 'job_id',
+        'industry' => 'industry_id',
+        'permission' => 'permission_id',
+        'role' => 'role_id',
+    ],
+
 ];

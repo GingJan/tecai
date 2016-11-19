@@ -8,3 +8,5 @@ _ide_helper.php
 .phpstorm.meta.php
 /config/debugbar.php
 /config/ide-helper.php
+
+public/Admin/

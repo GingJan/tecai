@@ -26,16 +26,18 @@ class BaseCriteria implements CriteriaInterface {
      * @return mixed
      */
     public function apply($model, RepositoryInterface $repository) {
-        $valid = array_allow($repository->getFieldsSearchable(), $this->request->query());
+        $reachable = $repository->getFieldsSearchable();
+        $query = $this->request->query();
+        $valid = array_allow($reachable, $query);
         $valid = array_map([$this, 'extractOperator'], $valid);
         foreach($valid as $field => $value) {
             $model = $model->where($field, $value['operator'], $value['value']);
         }
 
-        $query['sortedBy'] = empty($query['sortedBy']) ? 'created_at' : $query['sortedBy'];
-        $query['orderBy'] = empty($query['orderBy'])? 'DESC' : $query['orderBy'];
+        $query['orderBy'] = !empty($query['orderBy']) && in_array($query['orderBy'], $reachable) ? $query['orderBy'] : config('repository.criteria.defaultField.orderBy', 'id');
+        $query['sortedBy'] = !empty($query['sortedBy']) && strtoupper($query['sortedBy']) !== 'ASC' ? 'DESC' : 'ASC';
 
-        $model = $model->orderBy($query['sortedBy'], $query['orderBy']);
+        $model = $model->orderBy($query['orderBy'], $query['sortedBy']);
 
         //在BaseRepository有一句：$this->model = $c->apply($this->model, $this);，因此必须返回$model对象
         return $model;

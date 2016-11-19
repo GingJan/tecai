@@ -27,3 +27,38 @@ if(! function_exists('array_unallow')) {
         return array_diff_key($haystack, $unallowed);
     }
 }
+
+if(! function_exists('generateResourceURI')) {
+    /**
+     * 返回当前请求资源的URI
+     * @return string
+     */
+    function generateResourceURI() {
+        return app('api.url')->version(env('API_VERSION', 'v1'))->current();
+    }
+}
+
+if(! function_exists('array_rand_element')) {
+    /**
+     * 返回随机数组元素，个数也是随机的
+     * @param array $seed 种子数组
+     * @return array 随机数组
+     */
+    function array_rand_element(array $seed) {
+        $keys = array_rand($seed, mt_rand(1, count($seed)));
+        return array_map(function($key) use ($seed) {
+            return $seed[$key];
+        }, $keys);
+    }
+
+}
+
+if(! function_exists('is_md5_same')) {
+    function is_md5_same($one, $two) {
+        if (!is_string($one, $two)) {
+            $one = json_encode($one);
+            $two = json_encode($two);
+        }
+        return md5($one) === md5($two);
+    }
+}

@@ -4,20 +4,29 @@ namespace tecai\Http\Controllers\System;
 
 use Illuminate\Http\Request;
 
-use Prettus\Validator\Exceptions\ValidatorException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Support\Facades\DB;
 use tecai\Http\Requests;
 use tecai\Http\Controllers\Controller;
+use tecai\Models\System\Permission;
 use tecai\Models\System\Role;
+use tecai\Repositories\Interfaces\System\PermissionRepository;
 use tecai\Repositories\Interfaces\System\RoleRepository;
+use tecai\Transformers\CommonTransformer;
 
 class RoleController extends Controller
 {
+    /**
+     * @var RoleRepository
+     */
     protected $repository;
+
+    /**
+     * @param RoleRepository $roleRepository
+     */
     public function __construct(RoleRepository $roleRepository) {
         $this->repository = $roleRepository;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -26,21 +35,7 @@ class RoleController extends Controller
     public function index()
     {
         //根据id查询，角色名查询，描述查询
-        try {
-            return $this->repository->all();
-        } catch(\Exception $e) {
-            throw new NotFoundHttpException($e->getMessage());
-        }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return $this->response()->paginator($this->repository->paginate(),new CommonTransformer());
     }
 
     /**
@@ -51,13 +46,14 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            return $this->repository->create($request->all());
-        } catch (ValidatorException $e) {
-//            dd($e->getTraceAsString());
-//            dd($e->getMessage());
-            throw new BadRequestHttpException($e->getMessageBag());
-        }
+        $input = $request->all();
+        $role = DB::transaction(function($db) use ($input) {
+            //该闭包内的逻辑都处于事务中
+            $role = $this->repository->create($input);
+            //权限添加在模型观察器中处理。
+            return $role;
+        });
+        return $this->response()->created(generateResourceURI() . '/' .$role->id);
     }
 
     /**
@@ -68,22 +64,9 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        try {
-            return $this->repository->find($id);
-        } catch (\Exception $e) {
-            throw new NotFoundHttpException($e->getMessage());
-        }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Request $request,$id)
-    {
-
+        $role = $this->repository->with('permissions');
+        $role = is_numeric($id) ? $role->find($id) : $role->findOneByField('name', $id);
+        return $this->response()->item($role, new CommonTransformer());
     }
 
     /**
@@ -95,13 +78,13 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try {
-            return $this->repository->update($request->all(), $id);
-        } catch (ValidatorException $e) {
-            throw new BadRequestHttpException($e->getMessageBag());
-        } catch (\Exception $e) {
-            throw new NotFoundHttpException($e->getMessage());
-        }
+        $input = $request->all();
+
+        DB::transaction(function($db) use ($input, $id) {
+            return $this->repository->update($input, $id);
+        });
+
+        return $this->response()->noContent();
     }
 
     /**
@@ -112,10 +95,7 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $this->repository->delete($id);
-        } catch (\Exception $e) {
-            throw new NotFoundHttpException($e->getMessage());
-        }
+        $this->repository->delete($id);
+        return $this->response()->noContent();
     }
 }

@@ -74,6 +74,16 @@ return [
     |
     */
 
-    'prefix' => 'laravel',
+    'prefix' => 'tecai',
 
+    'structures' => [
+        'keys' => \tecai\Cache\Operations\Lords\RedisKey::class,
+        'sets' => \tecai\Cache\Operations\Sets\RedisSets::class,
+        'sortedSets' => \tecai\Cache\Operations\Sets\RedisSortedSets::class,
+        'hashs' => \tecai\Cache\Operations\Hash\RedisHash::class,
+        'list' => \tecai\Cache\Operations\Sets\RedisList::class,
+        'string'=> \tecai\Cache\Operations\Sets\RedisString::class,
+    ],
+
+    'seconds' => '3600'
 ];

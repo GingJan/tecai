@@ -36,6 +36,7 @@ company_id | 公司id | int |
 company_name | 公司名字 | string |
 company_logo_url | 公司logo的url地址 | string |
 type | 招聘类型 | string | 如：实习/校招/社招
+salary | 薪水 | string | 如：5000； 200/日； 6000/月； 面议；
 work_time | 工作时间 | string
 work_city | 工作城市 | array | 如：["广州","深圳"]
 hr_id | 发布该岗位的员工/hr id | int
@@ -49,7 +50,7 @@ to_time_timestamp | 截止时间时间戳 | 1475243580
 industry | 行业 | stirng |
 module | 岗位详细介绍的其他模块 | string 
 created_at | 创建时间 | string | 2016-09-26 23:33:31
-updated_at | 最后修改时间 | string | 2016-09-26 23:33:31
+updated_at | 最后更新时间 | string | 2016-09-26 23:33:31
 
 
 ** 响应实例：Response **
@@ -57,54 +58,57 @@ updated_at | 最后修改时间 | string | 2016-09-26 23:33:31
 {
   "data": [
     {
-      "id": 1,
-      "job_seq": "wderfgt352edg",
+      "id": 23,
+      "job_seq": "57e93ff15d561",
       "name": "前端工程师",
       "click": 0,
       "company_id": 1,
       "company_name": "腾讯",
       "company_logo_url": "www.baidu.com/image",
       "type": "实习",
-      "work_time": "",
+      "work_time": "5天/周",
       "work_city": [
-        "广州"
+        "广州",
+        "深圳"
       ],
       "hr_id": 1,
-      "intro": "",
-      "is_shown": 0,
-      "status": "未开始",
+      "intro": "这是介绍，可选",
+      "is_shown": false,
+      "status": "已结束",
       "from_time": "2016-09-25 21:53:00",
       "to_time": "2016-09-30 21:53:00",
       "industry": "",
-      "created_at": "2016-09-25 21:57:40",
-      "updated_at": "2016-09-25 21:57:40",
+      "created_at": "2016-09-26 23:34:09",
+      "updated_at": "2016-09-26 23:34:09",
       "module": 0,
+      "salary": "面议",
       "from_time_timestamp": 1474811580,
       "to_time_timestamp": 1475243580
     },
     {
-      "id": 3,
-      "job_seq": "57e7da93e3c62",
-      "name": "前端工程师",
+      "id": 22,
+      "job_seq": "57e93fcb82243",
+      "name": "UI设计师",
       "click": 0,
       "company_id": 1,
       "company_name": "腾讯",
       "company_logo_url": "www.baidu.com/image",
       "type": "实习",
-      "work_time": "",
+      "work_time": "5天/周",
       "work_city": [
         "广州"
       ],
       "hr_id": 1,
-      "intro": "",
-      "is_shown": 0,
-      "status": "未开始",
+      "intro": "这是介绍，可选",
+      "is_shown": false,
+      "status": "已结束",
       "from_time": "2016-09-25 21:53:00",
       "to_time": "2016-09-30 21:53:00",
       "industry": "",
-      "created_at": "2016-09-25 22:07:54",
-      "updated_at": "2016-09-25 22:07:54",
+      "created_at": "2016-09-26 23:33:31",
+      "updated_at": "2016-09-26 23:33:31",
       "module": 0,
+      "salary": "5000",
       "from_time_timestamp": 1474811580,
       "to_time_timestamp": 1475243580
     },
@@ -112,13 +116,14 @@ updated_at | 最后修改时间 | string | 2016-09-26 23:33:31
   ],
   "meta": {
     "pagination": {
-      "total": 35,
-      "count": 10,
-      "per_page": 10,
-      "current_page": 1,
-      "total_pages": 4,
+      "total": 37,
+      "count": 15,
+      "per_page": 15,
+      "current_page": 2,
+      "total_pages": 3,
       "links": {
-        "next": "http://tecai.com/jobs?page=2"
+        "previous": "http://tecai.com/jobs?perPage=1&page=1",
+        "next": "http://tecai.com/jobs?perPage=1&page=3"
       }
     }
   }
