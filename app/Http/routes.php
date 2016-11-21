@@ -14,6 +14,7 @@
 DingoRoute::group(['namespace' => 'System'], function($dgRoute) {
     $dgRoute->post('/admins', 'AdminController@store');
     $dgRoute->post('/login', 'AccountController@login');
+    $dgRoute->get('/verifyCode', 'VerifyCodeController@show');
 
 //    $dgRoute->group(['middleware' => ['jwt.auth', 'permission_check']], function () use ($dgRoute) {
     $dgRoute->group(['middleware' => 'api.auth'], function () use ($dgRoute) {
