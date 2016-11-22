@@ -59,20 +59,4 @@ class AccountRepositoryEloquent extends CommonRepositoryEloquent implements Acco
         return parent::update($attributes, $id);
     }
 
-//    public function findOne($field, $value = null, $columns = ['*']) {
-//        return parent::findByField($field,$value,$columns)->first();
-//    }
-//
-//    public function listByLimit($where = null) {
-//        $model = $this->model;
-//        $where['page'] = empty($where['page'])? 1 : $where['page'];
-//        $where['limit'] = empty($where['limit'])? config('repository.pagination.limit', 10) : $where['page'];
-//        $where['rule'] = empty($where['rule'])? 'created_at' : $where['rule'];
-//        $where['order'] = empty($where['order'])? 'DESC' : $where['order'];
-//        $model::where('id','!=',1)
-//            ->skip($where['page'])
-//            ->take($where['limit'])
-//            ->orderBy($where['rule'], $where['order'])
-//            ->get();
-//    }
 }
