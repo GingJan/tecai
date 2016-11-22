@@ -29,7 +29,7 @@ abstract class Operation implements OperationInterface
     public function __construct()
     {
         $prefix = config('cache.prefix');
-        $this->key = $this->prefix = !empty($prefix) ? $prefix . ':' : '';
+        $this->prefix = !empty($prefix) ? $prefix . ':' : '';
     }
 
     /**
@@ -38,7 +38,7 @@ abstract class Operation implements OperationInterface
      */
     public function setKey($key)
     {
-        $this->key .= $key;
+        $this->key = $this->prefix . $key;
         return $this;
     }
 
@@ -46,7 +46,7 @@ abstract class Operation implements OperationInterface
      * @param mixed $values
      * @return mixed
      */
-    public function set($values) {}
+    abstract public function set($values);
 
     /**
      * @param string $values

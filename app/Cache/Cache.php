@@ -38,17 +38,20 @@ class Cache
 
     public function __call($method, $params)
     {
-        $structure = static::$structures[strtolower($method)];
-
         if (!isset($params[0])) {
             throw new \InvalidArgumentException('key not given');
         }
-
         $key = $params[0];
-        if (!is_array($key) && !is_object($key)) {
-            return $structure->setKey($key);
-        } else {
-            throw new \InvalidArgumentException('params invalid');
+
+        if (isset(static::$structures[strtolower($method)])) {
+            $structure = static::$structures[strtolower($method)];
+            if (!is_array($key) && !is_object($key)) {
+                return $structure->setKey($key);
+            } else {
+                throw new \InvalidArgumentException('params invalid');
+            }
+        } else if ($method == 'repo'){
+//            return $this->cacheRepository->put();
         }
 
     }
