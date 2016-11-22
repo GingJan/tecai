@@ -14,16 +14,6 @@ class RedisHash extends Operation
     }
 
     /**
-     * @param string $key
-     * @return $this
-     */
-    public function setKey($key)
-    {
-        $this->key = $this->prefix . $key;
-        return $this;
-    }
-
-    /**
      * @param array $_
      * @return int
      */
