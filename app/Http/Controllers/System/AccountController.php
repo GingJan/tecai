@@ -4,6 +4,7 @@ namespace tecai\Http\Controllers\System;
 
 use Illuminate\Http\Request;
 
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use tecai\Cache\Facades\Cache;
 use tecai\Http\Requests;
 use tecai\Http\Controllers\Controller;
@@ -29,14 +30,88 @@ class AccountController extends Controller
     }
 
     public function login(Request $request) {
+        $this->checkVerifyCode($request);
+
         $credentials = $request->only('account', 'password');
         $token = \JWTAuth::attempt($credentials);
-        if (!$token) {
-            $this->response()->errorUnauthorized('invalid_credentials');
-        }
+        if (!$token)
+            $this->invalidAttempt($request);
+
         $user = \Auth::getUser();
+
+        //取出用户权限，存入redis
+        $this->cachePermissions($user);
+
         $user->token = $token;
-        //取出数据，存入redis/memcached
+        return $this->response()->item($user, new AccountTransformer());
+//        return $user;
+    }
+
+    /**
+     * @param Request $request
+     */
+    protected function invalidAttempt($request)
+    {
+        try {
+            Cache::sets('login:failed:ip')->add($request->getClientIp());//记录用户登录次数，第一次登录不需要验证码，密码错误后，第二次则需要
+        } catch (\Exception $e) {
+            \Log::notice($e->getFile() . '|' . $e->getLine() . $e->getMessage());
+        }
+
+        $this->response()->errorUnauthorized('invalid_credentials');
+    }
+
+    /**
+     * @param Request $request
+     */
+    protected function checkVerifyCode($request)
+    {
+        $cache = false;
+        try {
+            $cache = Cache::sets('login:failed:ip')->has($request->getClientIp());
+        } catch (\Exception $e) {
+            \Log::notice($e->getFile() . '|' . $e->getLine() . $e->getMessage());
+        }
+
+        if ($cache) {
+            //是否有Phrase头
+            $phrase = $request->header('Phrase');
+            if (is_null($phrase)) {
+                $this->response()->errorBadRequest('verifyCode invalid');
+            }
+
+            //ip 有效期 是否正确
+            list($payload, $encrypt) = explode('.', $phrase);
+            $segment = json_decode(base64_decode($payload), true);
+            if ($request->getClientIp() != $segment['ip'] || $_SERVER['REQUEST_TIME'] >= $segment['expire']) {
+//                throw new BadRequestHttpException('verifyCode invalid', null, 40000);
+                $this->response()->errorBadRequest('verifyCode invalid');
+            }
+
+            //判断验证码是否有效
+            if (hash_hmac('sha256', $payload . $request->get('verifyCode'), config('jwt.secret')) != $encrypt) {
+//                $this->invalidateVerifyCode($encrypt);
+                $this->response()->errorBadRequest('verifyCode invalid');
+            }
+        }
+
+    }
+
+    protected function invalidateVerifyCode($code)
+    {
+        try {
+            Cache::sets('blk:vc')->add($code);
+        } catch (\Exception $e) {
+            \Log::notice($e->getFile() . '|' . $e->getLine() . $e->getMessage());
+        }
+    }
+
+    /**
+     * @param \tecai\Models\System\Account $user
+     */
+    protected function cachePermissions($user)
+    {
+        //取出用户权限，存入redis
         $roles = $user->roles->all();
         $allPermissions = [];
         foreach ($roles as $role) {
@@ -50,10 +125,8 @@ class AccountController extends Controller
         try {
             Cache::sets('accounts:' . $user->getKey())->add($allPermissions);
         } catch (\Exception $e) {
-            //log it
+            \Log::notice($e->getFile() . '|' . $e->getLine() . $e->getMessage());
         }
-//        return $this->response()->item($user, new AccountTransformer());
-        return $user;
     }
 
     /**
