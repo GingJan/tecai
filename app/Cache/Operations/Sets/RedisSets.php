@@ -2,7 +2,6 @@
 namespace tecai\Cache\Operations\Sets;
 
 use Illuminate\Cache\RedisStore;
-use Predis\ClientInterface;
 use tecai\Cache\Operations\Operation;
 
 class RedisSets extends Operation implements SetsInterface
@@ -12,16 +11,6 @@ class RedisSets extends Operation implements SetsInterface
         parent::__construct();
         $this->store = $redisStore;
         $this->connection = $this->store->connection();
-    }
-
-    /**
-     * @param string $key
-     * @return $this
-     */
-    public function setKey($key)
-    {
-        $this->key .= $key;
-        return $this;
     }
 
     /**
