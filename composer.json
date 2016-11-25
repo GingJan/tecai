@@ -13,8 +13,9 @@
         "barryvdh/laravel-cors": "^0.8.2",
         "tymon/jwt-auth": "0.5.*",
         "symfony/polyfill-apcu": "^1.2",
-        "mews/captcha": "^2.1",
-        "predis/predis": "1.1.*"
+        "predis/predis": "1.1.*",
+        "monolog/monolog": "^1.21",
+        "gregwar/captcha": "1.1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
