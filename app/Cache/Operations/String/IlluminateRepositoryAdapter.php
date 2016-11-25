@@ -17,14 +17,20 @@ class IlluminateRepositoryAdapter extends Operation
         $this->illuminateCacheRepository = app(Repository::class);
     }
 
+    public function clean()
+    {
+        $this->connection->del($this->key);
+    }
+
     public function exists()
     {
         return $this->illuminateCacheRepository->has($this->key);
     }
 
-    public function set($value, $minutes = 30)
+    public function set($value, $minutes = '')
     {
-        $this->put($value, $minutes);
+        empty($minutes) ?
+            $this->illuminateCacheRepository->forever($this->key, $value) : $this->illuminateCacheRepository->put($this->key, $value, $minutes);
     }
 
     public function get($default = '')
@@ -32,17 +38,12 @@ class IlluminateRepositoryAdapter extends Operation
         return $this->illuminateCacheRepository->get($this->key, $default);
     }
 
-    public function pull()
+    public function setIfNotExists($value, $minutes)
     {
-        return $this->illuminateCacheRepository->pull($this->key, '');
+        $this->illuminateCacheRepository->add($this->key, $value, $minutes);
     }
 
-    public function put($value, $minutes = 30)
-    {
-        $this->illuminateCacheRepository->put($this->key, $value, $minutes);
-    }
-
-    public function add()
+    public function remeber()
     {
 
     }
@@ -50,5 +51,10 @@ class IlluminateRepositoryAdapter extends Operation
     public function forget()
     {
 
+    }
+
+    public function pull()
+    {
+        return $this->illuminateCacheRepository->pull($this->key, '');
     }
 }

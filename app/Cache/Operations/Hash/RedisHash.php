@@ -13,6 +13,11 @@ class RedisHash extends Operation
         $this->connection = $this->store->connection();
     }
 
+    public function clean()
+    {
+        $this->connection->del($this->key);
+    }
+
     /**
      * @param array $_
      * @return int

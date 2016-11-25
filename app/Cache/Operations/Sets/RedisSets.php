@@ -4,13 +4,23 @@ namespace tecai\Cache\Operations\Sets;
 use Illuminate\Cache\RedisStore;
 use tecai\Cache\Operations\Operation;
 
-class RedisSets extends Operation implements SetsInterface
+class RedisSets extends Operation
 {
     public function __construct(RedisStore $redisStore)
     {
         parent::__construct();
         $this->store = $redisStore;
         $this->connection = $this->store->connection();
+    }
+
+    public function clean()
+    {
+        return $this->connection->del($this->key);
+    }
+
+    //TODO
+    public function remember($value, \Closure $callback, $minutes = null)
+    {
     }
 
     /**
@@ -28,9 +38,7 @@ class RedisSets extends Operation implements SetsInterface
      */
     public function get($values)
     {
-        $all = $this->getAll();
-        dd($all);
-        return array_intersect($values, $all);
+        return $this->getAll();
     }
 
 
