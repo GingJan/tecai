@@ -1,50 +1,72 @@
 <?php
 namespace tecai\Cache\Operations\Sets;
 
-use Illuminate\Cache\RedisStore;
-use tecai\Cache\Operations\Operation;
+use tecai\Cache\Operations\RedisOperation;
 
-class RedisSets extends Operation
+class RedisSets extends RedisOperation
 {
-    public function __construct(RedisStore $redisStore)
-    {
-        parent::__construct();
-        $this->store = $redisStore;
-        $this->connection = $this->store->connection();
-    }
-
     public function clean()
     {
         return $this->connection->del($this->key);
     }
 
-    //TODO
-    public function remember($value, \Closure $callback, $minutes = null)
+    public function getOrCache(\Closure $callback, $minutes = null)
     {
+        if (!empty($res = $this->getAll())) {
+            return $res;
+        }
+
+        $this->set($cache = $callback());
+        $this->connection->expire($this->key, config('cache.minutes'));
+
+        return $cache;
+    }
+
+    /**
+     * @return bool
+     */
+    public function exists()
+    {
+        return (bool) $this->connection->exists($this->key);
     }
 
     /**
      * @param string $values
+     * @param int $minutes
      * @return int
      */
-    public function set($values)
+    public function set($values, $minutes = null)
     {
-        return $this->add($values);
+
+        $res = $this->add($values);
+
+        $this->validity($minutes);
+
+        return $res;
     }
 
     /**
-     * @param string $values
      * @return array
      */
-    public function get($values)
+    public function get()
     {
         return $this->getAll();
     }
 
+    /**
+     * @param $values
+     * @param null $minutes
+     */
+    public function setIfNotExists($values, $minutes = null)
+    {
+        if (!$this->connection->scard($this->key)) {
+            $this->set($values, $minutes);
+        }
+    }
 
     /**
      * @param int|string $values
-     * @param null $_
+     * @param int|string $_
      * @return int
      */
     public function add($values, $_ = null)
