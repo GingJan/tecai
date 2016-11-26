@@ -1,25 +1,27 @@
 <?php
 namespace tecai\Cache\Operations\String;
 
-use tecai\Cache\Operations\Operation;
+use Illuminate\Cache\RedisStore;
+use tecai\Cache\Operations\RedisOperation;
 use Illuminate\Contracts\Cache\Repository;
 
-class IlluminateRepositoryAdapter extends Operation
+class IlluminateRepositoryAdapter extends RedisOperation
 {
     /**
-     * @var Repository
+     * @var \Illuminate\Cache\Repository
      */
     protected $illuminateCacheRepository;
 
-    public function __construct()
+    public function __construct(RedisStore $redisStore)
     {
-        parent::__construct();
+        parent::__construct($redisStore);
         $this->illuminateCacheRepository = app(Repository::class);
     }
 
     public function clean()
     {
-        $this->connection->del($this->key);
+//        $this->illuminateCacheRepository->getStore()->connection();
+        $this->illuminateCacheRepository->forget($this->key);
     }
 
     public function exists()
@@ -27,15 +29,20 @@ class IlluminateRepositoryAdapter extends Operation
         return $this->illuminateCacheRepository->has($this->key);
     }
 
-    public function set($value, $minutes = '')
+    /**
+     * @param mixed $value
+     * @param null $minutes
+     * @return void
+     */
+    public function set($value, $minutes = null)
     {
-        empty($minutes) ?
+        is_null($minutes) ?
             $this->illuminateCacheRepository->forever($this->key, $value) : $this->illuminateCacheRepository->put($this->key, $value, $minutes);
     }
 
-    public function get($default = '')
+    public function get()
     {
-        return $this->illuminateCacheRepository->get($this->key, $default);
+        return $this->illuminateCacheRepository->get($this->key);
     }
 
     public function setIfNotExists($value, $minutes)
@@ -43,14 +50,21 @@ class IlluminateRepositoryAdapter extends Operation
         $this->illuminateCacheRepository->add($this->key, $value, $minutes);
     }
 
-    public function remeber()
+    /**
+     * Get an item from the cache, or store the default value.
+     *
+     * @param  \Closure  $callback
+     * @param  \DateTime|int  $minutes
+     * @return mixed
+     */
+    public function remember(\Closure $callback, $minutes = null)
     {
-
+        return $this->illuminateCacheRepository->remember($this->key, $minutes, $callback);
     }
 
-    public function forget()
+    public function remove()
     {
-
+        return $this->illuminateCacheRepository->forget($this->key);
     }
 
     public function pull()
