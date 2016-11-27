@@ -66,6 +66,7 @@ class User extends Account
     protected $fillable = [
         'account',
         'username',
+        'realname',
         'email',
         'phone',
         'age',
