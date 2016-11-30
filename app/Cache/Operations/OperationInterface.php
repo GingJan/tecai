@@ -5,16 +5,16 @@ interface OperationInterface
 {
     /**
      * @param string $key
+     * @param int $minutes
      * @return $this
      */
-    public function setKey($key);
+    public function setKey($key, $minutes = null);
 
     /**
      * @param mixed $values
-     * @param int $minutes
      * @return mixed
      */
-    public function set($values, $minutes = null);
+    public function set($values);
 
     /**
      * @return mixed
@@ -24,17 +24,16 @@ interface OperationInterface
     /**
      * Get an item from the cache, or store the default value.
      *
-     * @param  \Closure  $callback
-     * @param  \DateTime|int  $minutes
+     * @param \Closure $callback
      * @return mixed
      */
-    public function getOrCache(\Closure $callback, $minutes = null);
+    public function getOrCache(\Closure $callback);
 
     /**
      * @return mixed
      */
     public function clean();
 
-    public function setIfNotExists($value, $minutes);
+    public function setIfNotExists($value);
 
 }
