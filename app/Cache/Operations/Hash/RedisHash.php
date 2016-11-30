@@ -1,34 +1,49 @@
 <?php
 namespace tecai\Cache\Operations\Hash;
 
-use Illuminate\Cache\RedisStore;
-use tecai\Cache\Operations\Operation;
+use tecai\Cache\Operations\RedisOperation;
 
-class RedisHash extends Operation
+class RedisHash extends RedisOperation
 {
-    public function __construct(RedisStore $redisStore)
-    {
-        parent::__construct();
-        $this->store = $redisStore;
-        $this->connection = $this->store->connection();
-    }
+    protected $field;
 
-    public function clean()
+    public function field($field)
     {
-        $this->connection->del($this->key);
+        $this->field = $field;
+        return $this;
     }
-
     /**
-     * @param array $_
+     * @param array $value associated array.
      * @return int
      */
-    public function set($_)
+    public function set($value)
     {
-        if (is_array($_)) {
-            return $this->connection->hmset($this->key, $_);
+        if (!is_array($value))
+            throw new \InvalidArgumentException('invalid value');
+        $this->validity($this->minutes, function() use ($this, $value) {
+            return $this->connection->hmset($this->key, $value);
+        });
+
+        //以下代码搭配 ：call_user_func($callback, $this);
+//        $this->validity($this->minutes, function($this) use ($value) {
+//            return $this->connection->hmset($this->key, $value);
+//        });
+
+    }
+
+    public function getOrCache(\Closure $callback, $minutes = null, $entire = false)
+    {
+        if (!$entire) {
+            if ($value = $this->get($this->field)) {
+                return $value;
+            }
+
+            $value = $callback();
+            $this->set()
+
         }
-        list($field, $value) = func_get_args();
-        return $this->connection->hset($this->key, $field, $value);
+
+
     }
 
     /**
@@ -76,13 +91,17 @@ class RedisHash extends Operation
     }
 
     /**
-     * @param $field
-     * @param $value
+     * @param mixed $_
      * @return bool
      */
-    public function setIfNotExist($field, $value)
+    public function setIfNotExists($_)
     {
-        return (bool) $this->connection->hsetnx($this->key, $field, $value);
+        list ($field, $value) = (1 == func_num_args()) ? [key($_), current($_)] : func_get_args();
+
+        $this->validity(function() use ($this, $field, $value) {
+            return (bool) $this->connection->hsetnx($this->key, $field, $value);
+        }, $this->minutes);
+
     }
 
     /**
