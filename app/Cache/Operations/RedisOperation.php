@@ -32,46 +32,85 @@ abstract class RedisOperation implements OperationInterface
      */
     protected $minutes;
 
+    /**
+     * @var int
+     */
+    protected $defaultMinutes;
+
+    /**
+     * @param RedisStore $redisStore
+     */
     public function __construct(RedisStore $redisStore)
     {
         $prefix = config('cache.prefix');
         $this->prefix = !empty($prefix) ? $prefix . ':' : '';
+
         $this->store = $redisStore;
         $this->connection = $this->store->connection();
-        $this->minutes = config('cache.minutes', 60);
+        $this->defaultMinutes = config('cache.minutes', 60);
     }
 
-    public function getRedisStore()
+    /**
+     * @param string $key
+     * @param int $minutes
+     * @return $this
+     */
+    public function setKey($key, $minutes = null)
+    {
+        $this->key = $this->prefix . $key;
+        $this->minutes = $minutes ? : $this->defaultMinutes;
+        return $this;
+    }
+
+    /**
+     * @return RedisStore|Store
+     */
+    public function getStore()
     {
         return $this->store;
     }
 
-    protected function validity($minutes)
+    /**
+     * @param callable $callback
+     * @return mixed
+     */
+    protected function validity(\Closure $callback)
     {
-        $minutes = is_null($minutes) ? $this->mintes : $minutes;
+        if ($this->minutes > 0) {
 
-        if ($minutes > 0) {
-            $this->connection->expire($this->key, $minutes * 60);
+            $this->connection->multi();
+
+            $res = call_user_func($callback);
+//            call_user_func($callback, $this);
+
+            $this->connection->expire($this->key, $this->minutes * 60);
+
+            $this->connection->exec();
+
+            return $res;
         }
+
+        return call_user_func($callback);
     }
 
+    /**
+     * @param callable $callback
+     * @return mixed
+     */
     public function transaction(\Closure $callback)
     {
         $this->connection->multi();
-        call_user_func($callback);
+        $res = call_user_func($callback);
         $this->connection->exec();
+        return $res;
     }
 
-
-
     /**
-     * @param string $key
-     * @return $this
+     * @return int
      */
-    public function setKey($key)
+    public function clean()
     {
-        $this->key = $this->prefix . $key;
-        return $this;
+        return $this->connection->del($this->key);
     }
 
 }
