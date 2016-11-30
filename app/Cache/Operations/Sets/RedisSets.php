@@ -5,21 +5,17 @@ use tecai\Cache\Operations\RedisOperation;
 
 class RedisSets extends RedisOperation
 {
-    public function clean()
-    {
-        return $this->connection->del($this->key);
-    }
-
-    public function getOrCache(\Closure $callback, $minutes = null)
+    /**
+     * @param callable $callback
+     * @return array|mixed
+     */
+    public function getOrCache(\Closure $callback)
     {
         if (!empty($res = $this->getAll())) {
             return $res;
         }
 
-        $this->set($cache = $callback());
-        $this->connection->expire($this->key, config('cache.minutes'));
-
-        return $cache;
+        return $this->add($callback());
     }
 
     /**
@@ -32,17 +28,11 @@ class RedisSets extends RedisOperation
 
     /**
      * @param string $values
-     * @param int $minutes
      * @return int
      */
-    public function set($values, $minutes = null)
+    public function set($values)
     {
-
-        $res = $this->add($values);
-
-        $this->validity($minutes);
-
-        return $res;
+        return $this->add($values);
     }
 
     /**
@@ -55,13 +45,11 @@ class RedisSets extends RedisOperation
 
     /**
      * @param $values
-     * @param null $minutes
+     * @return bool|int
      */
-    public function setIfNotExists($values, $minutes = null)
+    public function setIfNotExists($values)
     {
-        if (!$this->connection->scard($this->key)) {
-            $this->set($values, $minutes);
-        }
+        return !$this->connection->exists($this->key) ? $this->add($values) : false;
     }
 
     /**
@@ -71,11 +59,12 @@ class RedisSets extends RedisOperation
      */
     public function add($values, $_ = null)
     {
-        if (!is_array($values)) {
-            $values = func_get_args();
-        }
+        $values = is_array($values) ? $values : func_get_args();
 
-        return $this->connection->sadd($this->key, (array) $values);
+        return $this->validity(function () use ($this, $values) {
+            return $this->connection->sadd($this->key, (array) $values);
+        });
+
     }
 
     /**
@@ -87,24 +76,27 @@ class RedisSets extends RedisOperation
     }
 
     /**
-     * @param string $keys
+     * @param array|string $keys
      * @param string $_ [optional]
      * @return array
      */
     public function diff($keys, $_ = null)
     {
-        return $this->connection->sdiff(func_get_args());
+        $keys = is_array($keys) ? $keys : func_get_args();
+        array_unshift($keys, $this->key);
+        return $this->connection->sdiff($keys);
     }
 
     /**
      * @param string $destKey
-     * @param string $keys
+     * @param array|string $keys
      * @param string $_ [optional]
      * @return int
      */
     public function diffTo($destKey, $keys, $_ = null)
     {
-        $keys = array_shift(func_get_args());
+        $keys = is_array($keys) ? $keys : func_get_args();
+        $keys[0] = $this->key;
         return $this->connection->sdiffstore($destKey, $keys);
     }
 
@@ -115,31 +107,35 @@ class RedisSets extends RedisOperation
      */
     public function inter($keys, $_ = null)
     {
-        $keys = func_get_args();
+        $keys = is_array($keys) ? $keys : func_get_args();
         array_unshift($keys, $this->key);
         return $this->connection->sinter($keys);
     }
 
     /**
      * @param string $destKey
-     * @param string $key
+     * @param array|string $keys
      * @param string $_ [optional]
      * @return int
      */
-    public function interTo($destKey, $key, $_ = null)
+    public function interTo($destKey, $keys, $_ = null)
     {
-        $keys = func_get_args();
+        $keys = is_array($keys) ? $keys : func_get_args();
         $keys[0] = $this->key;
         return $this->connection->sinterstore($destKey, $keys);
     }
 
     /**
-     * @param string $value
-     * @return int
+     * @param array|string $value
+     * @return bool
      */
-    public function has($value)
+    public function has($value, $all = false)
     {
-        return $this->connection->sismember($this->key, $value);
+        if (is_array($value)) {
+            $this->connection->sadd('quark.temp', $value);
+            return (bool) count($this->connection->sinter([$this->key, 'quark.temp']));
+        }
+        return (bool) $this->connection->sismember($this->key, $value);
     }
 
     /**
@@ -155,9 +151,18 @@ class RedisSets extends RedisOperation
      * @param string $value
      * @return int
      */
-    public function moveTo($destKey, $value)
+    public function moveTo($destKey, $value, $minutes = null)
     {
-        return $this->connection->smove($this->key, $destKey, $value);
+        $minutes = $minutes ? : $this->defaultMinutes;
+        if ($minutes > 0) {
+            return $this->transaction(function () use ($this, $destKey, $value, $minutes){
+                $res = $this->connection->smove($this->key, $destKey, $value);
+                $this->connection->expire($destKey, $minutes);
+                return $res;
+            });
+        }
+
+        return $this->connection->move($this->key, $destKey, $value);
     }
 
     /**
@@ -190,13 +195,15 @@ class RedisSets extends RedisOperation
     }
 
     /**
-     * @param string $key
+     * @param string $keys
      * @param string $_ [optional]
      * @return array
      */
-    public function union($key, $_ = null)
+    public function union($keys, $_ = null)
     {
-        return $this->connection->sunion(func_get_args());
+        $keys = is_array($keys) ? $keys : func_get_args();
+        array_unshift($keys, $this->key);
+        return $this->connection->sunion($keys);
     }
 
     /**
@@ -207,7 +214,7 @@ class RedisSets extends RedisOperation
      */
     public function unionTo($destKey, $keys, $_ = null)
     {
-        $keys = func_get_args();
+        $keys = is_array($keys) ? $keys : func_get_args();
         $keys[0] = $this->key;
         return $this->connection->sunionstore($destKey, $keys);
     }
