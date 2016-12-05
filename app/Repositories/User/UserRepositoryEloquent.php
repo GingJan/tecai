@@ -18,9 +18,9 @@ class UserRepositoryEloquent extends CommonRepositoryEloquent implements UserRep
     protected $rules = [
         ValidatorInterface::RULE_CREATE => [
             'account' => ['required', 'unique:admins','max:31'],
-            'username' => ['required', 'unique:users', 'max:31'],
-            'realname' => ['required', 'max:7'],
-            'email' => ['required', 'email', 'max:31','unique:users'],
+            'username' => ['sometimes', 'unique:users', 'max:31'],
+            'realname' => ['sometimes', 'max:7'],
+            'email' => ['sometimes', 'email', 'max:31','unique:users'],
             'phone' => ['sometimes', 'regex:/^1[3|5|8]{1}[0-9]{1}[0-9]{8}$/', 'max:11', 'unique:users'],//这样验证为unique，但是数据表的索引是index
             'age' => ['sometimes', 'numeric', 'min:0'],
             'sex' => ['sometimes', 'boolean'],
