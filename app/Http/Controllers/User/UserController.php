@@ -60,9 +60,11 @@ class UserController extends Controller
             $this->response()->errorBadRequest('account 不可为全数字');
         }
 
-        $model = DB::transaction( function($db) use($attrs, $accountRepository, $request) {
+        $model = DB::transaction( function ($db) use ($attrs, $accountRepository, $request) {
                     $accountRepository->create($attrs);//创建账户
-                    $model = $this->repository->create($request->all());//创建用户信息
+                    $user = $request->all();
+                    $user['email'] = $user['account'];
+                    $model = $this->repository->create($user);//创建用户信息
                     return $model;
                 });
         //log,记录日志的方式是通过事件来实现
