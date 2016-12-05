@@ -12,6 +12,9 @@ class IlluminateRepositoryAdapter extends RedisOperation
      */
     protected $illuminateCacheRepository;
 
+    /**
+     * @param RedisStore $redisStore
+     */
     public function __construct(RedisStore $redisStore)
     {
         parent::__construct($redisStore);
@@ -31,13 +34,12 @@ class IlluminateRepositoryAdapter extends RedisOperation
 
     /**
      * @param mixed $value
-     * @param null $minutes
      * @return void
      */
-    public function set($value, $minutes = null)
+    public function set($value)
     {
-        is_null($minutes) ?
-            $this->illuminateCacheRepository->forever($this->key, $value) : $this->illuminateCacheRepository->put($this->key, $value, $minutes);
+        $this->minutes < 0 ?
+            $this->illuminateCacheRepository->forever($this->key, $value) : $this->illuminateCacheRepository->put($this->key, $value, $this->minutes);
     }
 
     public function get()
@@ -45,21 +47,20 @@ class IlluminateRepositoryAdapter extends RedisOperation
         return $this->illuminateCacheRepository->get($this->key);
     }
 
-    public function setIfNotExists($value, $minutes)
+    public function setIfNotExists($value)
     {
-        $this->illuminateCacheRepository->add($this->key, $value, $minutes);
+        $this->illuminateCacheRepository->add($this->key, $value, $this->minutes);
     }
 
     /**
      * Get an item from the cache, or store the default value.
      *
      * @param  \Closure  $callback
-     * @param  \DateTime|int  $minutes
      * @return mixed
      */
-    public function remember(\Closure $callback, $minutes = null)
+    public function getOrCache(\Closure $callback)
     {
-        return $this->illuminateCacheRepository->remember($this->key, $minutes, $callback);
+        return $this->illuminateCacheRepository->remember($this->key, $this->minutes, $callback);
     }
 
     public function remove()
@@ -67,8 +68,8 @@ class IlluminateRepositoryAdapter extends RedisOperation
         return $this->illuminateCacheRepository->forget($this->key);
     }
 
-    public function pull()
+    public function pop()
     {
-        return $this->illuminateCacheRepository->pull($this->key, '');
+        return $this->illuminateCacheRepository->pull($this->key);
     }
 }
