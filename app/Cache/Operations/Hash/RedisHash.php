@@ -31,17 +31,31 @@ class RedisHash extends RedisOperation
 
     }
 
-    public function getOrCache(\Closure $callback, $minutes = null, $entire = false)
+    /**
+     * @param callable $callback
+     * @param bool $entire overwrite entirely or just one field.
+     * @return array
+     */
+    public function getOrCache(\Closure $callback, $entire = false)
     {
-        if (!$entire) {
-            if ($value = $this->get($this->field)) {
+        if ($entire) {
+            if($value = $this->getAll()) {
                 return $value;
             }
 
             $value = $callback();
-            $this->set()
-
+            $this->set($value);
+            return $value;
         }
+
+        if ($value = $this->get($this->field)) {
+            return $value;
+        }
+
+        $value = $callback();
+        $this->set($value);
+        return $value;
+
 
 
     }
