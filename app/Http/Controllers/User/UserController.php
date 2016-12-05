@@ -13,6 +13,7 @@ use tecai\Http\Requests;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use tecai\Models\System\Account;
+use tecai\Models\User\User;
 use tecai\Repositories\Interfaces\System\AccountRepository;
 use tecai\Repositories\Interfaces\User\UserRepository;
 use tecai\Transformers\CommonTransformer;
@@ -48,12 +49,18 @@ class UserController extends Controller
      */
     public function store(Request $request, AccountRepository $accountRepository)
     {
-        $model = DB::transaction( function($db) use($request, $accountRepository) {
-                    $attrs = $request->only('account', 'password');
-                    $attrs['type'] = Account::TYPE_USER;
-                    if (is_numeric($attrs['account'])) {
-                        $this->response()->errorBadRequest('account 不可为全数字');
-                    }
+        if (User::WAY_PHONE == $request->get('way')) {
+            //调用 手机注册服务
+        }
+
+        //邮箱注册
+        $attrs = $request->only('account', 'password');
+        $attrs['type'] = Account::TYPE_USER;
+        if (is_numeric($attrs['account'])) {
+            $this->response()->errorBadRequest('account 不可为全数字');
+        }
+
+        $model = DB::transaction( function($db) use($attrs, $accountRepository, $request) {
                     $accountRepository->create($attrs);//创建账户
                     $model = $this->repository->create($request->all());//创建用户信息
                     return $model;

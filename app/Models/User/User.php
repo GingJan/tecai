@@ -59,6 +59,9 @@ class User extends Account
     const SEX_FEMALE = 0;
     const SEX_MALE = 1;
 
+    const WAY_PHONE = 0;
+    const WAY_EMAIL = 1;
+
     //如果不填该项，则数据表默认是模型名字的复数users
     protected $table = 'users';
 
