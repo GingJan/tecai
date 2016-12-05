@@ -204,10 +204,11 @@ _请求字段_
 ------------- | ---------------- | :-----------------: | ------------ | ------------------
 account | 账号 | Y | string |
 password | 密码 | Y | string |
-realname | 真实姓名 | Y | string |
-username | 用户昵称 | N | string | 默认与account相同
-email | 邮箱 | Y | string | 长度31位
+way | 注册方式 | Y | enum | 手机：0，邮箱：1，默认邮箱
+email | 邮箱 | N | string | 长度31位
 phone | 电话 | N | string | 长度11位
+realname | 真实姓名 | N | string |
+username | 用户昵称 | N | string | 默认与account相同
 age | 年龄 | N | int |
 sex | 性别 | N | enum | 女：0，男：1
 school | 毕业学校 | N | string |
