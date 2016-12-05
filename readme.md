@@ -1,5 +1,8 @@
 # This is a platform like Lagou
 
+## Version
+v0.0.2
+
 ## Introduction
 This is a platform that provide jobs and talent searching 
 
