@@ -38,6 +38,11 @@ class AppServiceProvider extends ServiceProvider
 //            $handler->render(app(\Illuminate\Http\Request::class), $e);
 //        });
         \DingoApi::error(function(\Exception $e) {
+            header('Access-Control-Allow-Origin: *');
+            header('Access-Control-Allow-Credentials: true');
+            header('Access-Control-Allow-Headers: *');
+            header('Access-Control-Allow-Methods: *');
+            header('Access-Control-Max-Age: 360');
 //            var_dump($e instanceof ModelNotFoundException);
             if( $e instanceof \ErrorException) {
 //                //log;
@@ -54,11 +59,7 @@ class AppServiceProvider extends ServiceProvider
 //                throw $e;
 //            }
             else if ( $e instanceof ValidatorException) {
-                header('Access-Control-Allow-Origin: *');
-                header('Access-Control-Allow-Credentials: true');
-                header('Access-Control-Allow-Headers: *');
-                header('Access-Control-Allow-Methods: *');
-                header('Access-Control-Max-Age: 120');
+
 //                dd(app(CorsService::class)->addActualRequestHeaders(\DingoApi::response(), app(Request::class)));
 //                app('CorsService')->addActualRequestHeaders($response, $request);
                 \DingoApi::response()->errorBadRequest($e->getMessageBag());
