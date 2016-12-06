@@ -53,14 +53,14 @@ DingoRoute::group(['namespace' => 'System'], function($dgRoute) {
 DingoRoute::group(['namespace' => 'User'], function($dgRoute) {
     $dgRoute->post('/users', 'UserController@store');
 
-    $dgRoute->group(['middleware' => 'jwt_check'], function () use ($dgRoute) {
+//    $dgRoute->group(['middleware' => 'jwt_check'], function () use ($dgRoute) {
         $dgRoute->group(['prefix' => 'users'], function () use ($dgRoute) {
             $dgRoute->get('/', 'UserController@index');
             $dgRoute->get('/{id}', 'UserController@show');
             $dgRoute->match(['put', 'patch'], '/{id}', 'UserController@update');
             $dgRoute->delete('/{id}', 'UserController@destroy');
         });
-    });
+//    });
 
     $dgRoute->group(['prefix' => 'jobs'], function () use ($dgRoute) {
         $dgRoute->get('/', 'JobController@index');
