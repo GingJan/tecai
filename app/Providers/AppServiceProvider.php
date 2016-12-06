@@ -2,6 +2,7 @@
 
 namespace tecai\Providers;
 
+use Barryvdh\Cors\Stack\CorsService;
 use Dingo\Api\Exception\ResourceException;
 use Dingo\Api\Http\Response;
 use Illuminate\Contracts\Debug\ExceptionHandler;
@@ -53,6 +54,13 @@ class AppServiceProvider extends ServiceProvider
 //                throw $e;
 //            }
             else if ( $e instanceof ValidatorException) {
+                header('Access-Control-Allow-Origin: *');
+                header('Access-Control-Allow-Credentials: true');
+                header('Access-Control-Allow-Headers: *');
+                header('Access-Control-Allow-Methods: *');
+                header('Access-Control-Max-Age: 120');
+//                dd(app(CorsService::class)->addActualRequestHeaders(\DingoApi::response(), app(Request::class)));
+//                app('CorsService')->addActualRequestHeaders($response, $request);
                 \DingoApi::response()->errorBadRequest($e->getMessageBag());
             }
         });
