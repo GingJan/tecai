@@ -156,7 +156,9 @@ return [
     */
 
     'middleware' => [
-
+        //CORS也可以在kernel.php中只添加HandleCors一项
+//        \Barryvdh\Cors\HandlePreflightSimple::class,
+//        \Barryvdh\Cors\HandleCors::class,
     ],
 
     /*
