@@ -2,17 +2,11 @@
 
 namespace tecai\Providers;
 
-use Barryvdh\Cors\Stack\CorsService;
-use Dingo\Api\Exception\ResourceException;
-use Dingo\Api\Http\Response;
 use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use Prettus\Repository\Contracts\CriteriaInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use tecai\Criteria\BaseCriteria;
 use tecai\Models\Common\Tag;
 use tecai\Models\Organization\Corporation;
@@ -37,34 +31,11 @@ class AppServiceProvider extends ServiceProvider
 //        \DingoApi::error(function(\Exception $e) use($handler) {
 //            $handler->render(app(\Illuminate\Http\Request::class), $e);
 //        });
-        \DingoApi::error(function(\Exception $e) {
-            header('Access-Control-Allow-Origin: *');
-            header('Access-Control-Allow-Credentials: true');
-            header('Access-Control-Allow-Headers: *');
-            header('Access-Control-Allow-Methods: *');
-            header('Access-Control-Max-Age: 360');
-//            var_dump($e instanceof ModelNotFoundException);
-            if( $e instanceof \ErrorException) {
-//                //log;
 
-//                \DingoApi::response()->errorInternal($e->getMessage());
-            }
-            else if( $e instanceof ModelNotFoundException ) {
-//                throw new ResourceException($e->getMessage(), null, $e); //422
-                $model = $e->getModel();
-                $model = substr($model, strrpos($model, '\\') + 1);
-                \DingoApi::response()->errorNotFound('The ' . $model . '(s) Not Found');
-            }
-//            else if ( $e instanceof HttpException) {
-//                throw $e;
-//            }
-            else if ( $e instanceof ValidatorException) {
-
-//                dd(app(CorsService::class)->addActualRequestHeaders(\DingoApi::response(), app(Request::class)));
-//                app('CorsService')->addActualRequestHeaders($response, $request);
-                \DingoApi::response()->errorBadRequest($e->getMessageBag());
-            }
-        });
+        \DingoApi::error(\Closure::bind(function (ValidatorException $e) {
+            $response = $this->genericResponse(new BadRequestHttpException($e->getMessageBag(), $e));
+            return $response;
+        }, app('api.exception'), app('api.exception')));
     }
 
     /**
